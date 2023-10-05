@@ -1,0 +1,29 @@
+{
+  "name": "hand_game",
+  "version": "0.0.1",
+  "description": "Make a gesture to win",
+  "main": "index.js",
+  "workspaces": [
+    "server",
+    "client"
+  ],
+  "scripts": {
+    "client:dev": "npm run dev --workspace=client",
+    "server:dev": "npm run start:dev --workspace=server",
+    "start": "concurrently 'npm:server:dev' 'npm:client:dev'",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://git@github.com/Gerpea/hand_game.git"
+  },
+  "author": "Gerpea",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Gerpea/hand_game/issues"
+  },
+  "homepage": "https://github.com/Gerpea/hand_game#readme",
+  "devDependencies": {
+    "concurrently": "^8.2.1"
+  }
+}
