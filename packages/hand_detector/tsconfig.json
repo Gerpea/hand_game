@@ -1,0 +1,23 @@
+{
+  "include": ["src/*"],
+  "exclude": ["node_modules", "lib"],
+  "compilerOptions": {
+    "lib": ["ES2015", "DOM"],
+    "module": "ESNext",
+    "moduleResolution": "node",
+    "target": "ES5",
+    "esModuleInterop": true,
+    "sourceMap": true,
+    "importHelpers": true,
+    "declaration": true,
+    "rootDir": "./src",
+    "outDir": "./lib",
+    "strict": true,
+    "noImplicitReturns": true,
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
+    "jsx": "react",
+    "skipLibCheck": true,
+    "forceConsistentCasingInFileNames": true
+  }
+}

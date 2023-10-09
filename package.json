@@ -5,7 +5,8 @@
   "main": "index.js",
   "workspaces": [
     "server",
-    "client"
+    "client",
+    "packages/**"
   ],
   "scripts": {
     "client:dev": "npm run dev --workspace=client",
