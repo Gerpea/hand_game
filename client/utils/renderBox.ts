@@ -1,8 +1,10 @@
-export const renderBoxes = (canvas: HTMLCanvasElement, boxes: Box) => {
-  const ctx = canvas.getContext("2d");
+import { Box } from "hand_detector";
+
+export const renderBoxes = (canvas: HTMLCanvasElement, boxes: Box[]) => {
+  const ctx = canvas.getContext("2d")!;
   // Clean canvas
   ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
-
+  
   boxes.forEach((box) => {
     const color = '#48F90A';
     const { x: x1, y: y1, w: width, h: height } = box;
