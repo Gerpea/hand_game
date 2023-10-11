@@ -1,5 +1,3 @@
-type onProgressHandler = (progress: number) => void;
-
 /**
  * Download a file to a buffer with progress callback
  *
@@ -12,7 +10,7 @@ type onProgressHandler = (progress: number) => void;
  *  statusText: string;
  * }
  */
-export const download = (url: string, onProgress?: onProgressHandler): Promise<ArrayBuffer> => {
+export const download = (url, onProgress) => {
     return new Promise((resolve, reject) => {
         const request = new XMLHttpRequest();
         request.open("GET", url, true);

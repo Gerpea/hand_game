@@ -1,16 +1,9 @@
-import { useEffect, useRef, useState } from "react";
-import { useHandPosition } from "hand_detector";
+import { useEffect, useState } from "react";
+import { Box, useHandPosition } from "hand_detector";
 import styled from "styled-components";
-import Card from "@/components/Card";
 import GestureCard from "@/components/GestureCard";
 import HandCard from "@/components/HandCard";
 import { useCameraImage } from "@/hooks";
-import { renderBoxes } from "@/utils";
-
-const localStreamConstraints = {
-  audio: false,
-  video: true,
-};
 
 const StyledContainer = styled.div`
   display: flex;
@@ -21,9 +14,11 @@ let timeoutId: NodeJS.Timeout;
 
 export default function DevHome() {
   const cameraImage = useCameraImage();
+  const [boxes, setBoxes] = useState<Box[]>([]);
 
   const { detect } = useHandPosition({
     scoreThreshold: 0.7,
+    iouThreshold: 0.6,
     topk: 2,
   });
 
@@ -41,16 +36,20 @@ export default function DevHome() {
         // @ts-ignore
         timeoutId = undefined;
 
+        console.time("Detection");
         const boxes = await detect(cameraImage);
+        console.timeEnd("Detection");
+
+        setBoxes(boxes);
       })();
-    }, 1000);
+    }, 300);
   }, [cameraImage, detect]);
 
   return (
     <>
       <StyledContainer>
         <GestureCard gesture="Hi!" />
-        <HandCard img={cameraImage} />
+        <HandCard imgSrc={cameraImage} boxes={boxes} />
       </StyledContainer>
     </>
   );

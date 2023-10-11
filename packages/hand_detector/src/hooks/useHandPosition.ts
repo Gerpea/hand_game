@@ -1,40 +1,41 @@
-import { useEffect, useState } from "react";
-import { HandDetector } from "..";
-import { Params } from "../types";
-
-const IOU_THRESHOLD = 0.45;
-const SCORE_THRESHOLD = 0.25;
-const TOP_K = 1;
+import { useEffect, useRef } from "react";
+import { Box, DetectorWorker, Params } from "../types";
 
 export const useHandPosition = (params?: Partial<Params>) => {
-    const { iouThreshold = IOU_THRESHOLD, scoreThreshold = SCORE_THRESHOLD, topk = TOP_K } = params || {}
-    const [handDetector, setHandDetector] = useState<HandDetector>();
+    const workerRef = useRef<DetectorWorker>();
 
     useEffect(() => {
-        const detector = new HandDetector({
-            iouThreshold,
-            scoreThreshold,
-            topk
-        })
-
-        if (!detector.inited) {
-            (async () => {
-                await detector.initialize()
-                setHandDetector(detector)
-            })()
-        }
+        workerRef.current = new Worker(new URL('../../workers/detector.worker.js', import.meta.url))
     }, [])
 
-    const detect = async (image: HTMLImageElement) => {
-        if (handDetector) {
-            return handDetector.detect(image)
-        } else {
-            throw 'Hand detector is not initialized yet'
+    useEffect(() => {
+        if (!workerRef.current || !params) {
+            return
         }
+
+        workerRef.current.postMessage({ type: 'params', data: params })
+    }, [params])
+
+    const detect = async (image: string): Promise<Box[]> => {
+        return new Promise((resolve, reject) => {
+            if (!workerRef.current) {
+                reject("Worker doesn't set")
+                return
+            }
+
+            workerRef.current.onmessage = function (msg: any) {
+                switch (msg.data.type) {
+                    case 'boxes':
+                        resolve(msg.data.data)
+                        return
+                }
+            }
+
+            workerRef.current.postMessage({ type: 'image', data: image })
+        })
     }
 
     return {
-        detect,
-        inited: handDetector?.inited
+        detect
     }
 }

@@ -4,14 +4,18 @@ const LOCAL_STREAM_CONSTRAINTS = {
   audio: false,
   video: true,
 };
-
+/**
+ * Use MediaStream from camera to get image every browser repaint
+ *
+ * @return {cameraImage} Image from a camera in base64 string
+ */
 export const useCameraImage = () => {
   const videoRef = useRef<HTMLVideoElement>();
   const canvasRef = useRef<HTMLCanvasElement>();
   const canvasCtx = useRef<CanvasRenderingContext2D | null>(null);
 
   const [videoStream, setVideoStream] = useState<MediaStream>();
-  const [fullImage, setFullImage] = useState<HTMLImageElement>();
+  const [cameraImage, setCameraImage] = useState<string>();
 
   useEffect(() => {
     navigator.mediaDevices
@@ -51,13 +55,11 @@ export const useCameraImage = () => {
         canvasRef.current?.height || 0
       );
 
-      const image = new Image();
-      image.src = canvasRef.current!.toDataURL();
-      setFullImage(image);
+      setCameraImage(canvasRef.current!.toDataURL());
     }
 
     getImage();
   }, []);
 
-  return fullImage;
+  return cameraImage;
 };

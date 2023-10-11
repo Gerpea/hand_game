@@ -1,14 +1,25 @@
 import React, { useEffect, useRef } from "react";
+import { Box } from "hand_detector";
 import Card from "./Card";
 import { renderBoxes } from "@/utils";
 
 type Props = {
-  img?: HTMLImageElement;
+  imgSrc?: string;
+  boxes?: Box[];
 };
 
-const HandCard: React.FC<Props> = ({ img }) => {
+const HandCard: React.FC<Props> = ({ imgSrc, boxes }) => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
+  const drawCanvasRef = useRef<HTMLCanvasElement>(null);
   const canvasCtx = useRef<CanvasRenderingContext2D | null>();
+
+  useEffect(() => {
+    if (!drawCanvasRef.current || !boxes) {
+      return;
+    }
+
+    renderBoxes(drawCanvasRef.current!, boxes);
+  }, [boxes]);
 
   useEffect(() => {
     if (!canvasRef.current) {
@@ -23,7 +34,7 @@ const HandCard: React.FC<Props> = ({ img }) => {
       return;
     }
 
-    if (!img) {
+    if (!imgSrc) {
       canvasCtx.current.clearRect(
         0,
         0,
@@ -33,18 +44,35 @@ const HandCard: React.FC<Props> = ({ img }) => {
       return;
     }
 
-    canvasCtx.current.drawImage(
-      img,
-      0,
-      0,
-      canvasRef.current?.width || 0,
-      canvasRef.current?.height || 0
-    );
-  }, [img]);
+    const img = new Image();
+    img.src = imgSrc;
+    img.onload = () => {
+      canvasCtx.current!.drawImage(
+        img,
+        0,
+        0,
+        canvasRef.current?.width || 0,
+        canvasRef.current?.height || 0
+      );
+    };
+  }, [imgSrc]);
 
   return (
     <Card>
-      <canvas ref={canvasRef} width="416" height="416" />
+      <canvas
+        ref={canvasRef}
+        width="416"
+        height="416"
+        style={{ position: "absolute" }}
+      />
+      {boxes && (
+        <canvas
+          ref={drawCanvasRef}
+          width="416"
+          height="416"
+          style={{ position: "absolute" }}
+        />
+      )}
     </Card>
   );
 };

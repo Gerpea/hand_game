@@ -7,9 +7,9 @@
   "module": "lib-esm/index.js",
   "typings": "lib",
   "files": [
-    "dist"
+    "lib"
   ],
-  "types": "dist/index.d.ts",
+  "types": "lib/index.d.ts",
   "scripts": {
     "start": "webpack --watch",
     "build": "npm run clean && tsc && webpack",
@@ -18,7 +18,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "@techstark/opencv-js": "^4.8.0-release.6",
+    "jimp": "^0.22.10",
     "onnxruntime-web": "^1.13.1"
   },
   "peerDependencies": {

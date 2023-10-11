@@ -36,3 +36,22 @@ export type Box = {
     w: number;
     h: number;
 }
+
+type DetectorWorkerImageMessage = {
+    type: 'image',
+    data: string
+}
+type DetectorWorkerBoxesMessage = {
+    type: 'boxes',
+    data: Box[]
+}
+type DetectorWorkerParamsMessage = {
+    type: 'params',
+    data: Partial<Params>
+}
+
+export type DetectorWorkerMessage = DetectorWorkerImageMessage | DetectorWorkerBoxesMessage | DetectorWorkerParamsMessage
+
+export interface DetectorWorker extends Omit<Worker, 'postMessage'> {
+    postMessage(command: DetectorWorkerMessage): void;
+}
