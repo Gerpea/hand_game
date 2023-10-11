@@ -1,5 +1,6 @@
-import React, { useEffect, useLayoutEffect, useRef } from "react";
+import React, { useEffect, useRef } from "react";
 import Card from "./Card";
+import { renderBoxes } from "@/utils";
 
 type Props = {
   img?: HTMLImageElement;
