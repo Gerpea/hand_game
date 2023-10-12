@@ -25,6 +25,10 @@
   },
   "homepage": "https://github.com/Gerpea/hand_game#readme",
   "devDependencies": {
+    "@types/file-saver": "^2.0.5",
     "concurrently": "^8.2.1"
+  },
+  "dependencies": {
+    "file-saver": "^2.0.5"
   }
 }

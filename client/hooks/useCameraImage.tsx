@@ -26,6 +26,8 @@ export const useCameraImage = () => {
       });
 
     canvasRef.current = document.createElement("canvas");
+    canvasRef.current.setAttribute('width', '416px')
+    canvasRef.current.setAttribute('height', '416px')
     canvasCtx.current = canvasRef.current.getContext("2d", { alpha: false });
   }, []);
 
