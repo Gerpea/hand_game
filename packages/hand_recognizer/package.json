@@ -1,5 +1,5 @@
 {
-  "name": "hand_detector",
+  "name": "hand_recognizer",
   "version": "1.0.0",
   "private": true,
   "description": "Detect hands on images",

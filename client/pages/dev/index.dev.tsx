@@ -1,5 +1,9 @@
 import { useCallback, useEffect, useRef, useState } from "react";
-import { Box, useGestureClassification, useHandPosition } from "hand_detector";
+import {
+  Box,
+  useGestureClassification,
+  useHandPosition,
+} from "hand_recognizer";
 import styled from "styled-components";
 import GestureCard from "@/components/GestureCard";
 import HandCard from "@/components/HandCard";

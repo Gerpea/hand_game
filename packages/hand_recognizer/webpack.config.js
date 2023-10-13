@@ -5,14 +5,14 @@ const NodePolyfillPlugin = require("node-polyfill-webpack-plugin");
 module.exports =
 {
     entry: {
-        'hand_detector': './src/index.ts',
-        'hand_detector.min': './src/index.ts',
+        'hand_recognizer': './src/index.ts',
+        'hand_recognizer.min': './src/index.ts',
     },
     output: {
         path: path.resolve(__dirname, '_bundles'),
         filename: '[name].js',
         libraryTarget: 'umd',
-        library: 'hand_detector',
+        library: 'hand_recognizer',
         umdNamedDefine: true
     },
     resolve: {
