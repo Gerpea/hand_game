@@ -10,8 +10,6 @@ globalThis.onmessage = async function ({ data: { type, data } }) {
             detector.setParams(data)
             return
         case 'image':
-            // const image = new Image()
-            // image.src = data
             const boxes = await detector.detect(data)
             self.postMessage({ type: 'boxes', data: boxes })
             return

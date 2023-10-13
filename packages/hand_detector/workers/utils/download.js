@@ -2,7 +2,7 @@
  * Download a file to a buffer with progress callback
  *
  * @async
- * @param {string} url - The url to download from
+ * @param {String} url - The url to download from
  * @param {onProgressHandler} [onProgress] - Callback for download progress 
  * @returns {Promise} A promise that fullfiled with ArrayBuffer and rejected with 
  * {

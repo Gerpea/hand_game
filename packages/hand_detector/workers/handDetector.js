@@ -79,8 +79,8 @@ export class HandDetector {
     /**
      *
      *
-     * @param {HTMLImageElement} image Source image
-     * @return {*}  {Promise<Box[]>}
+     * @param {String} image Source image in base64 string
+     * @return {Promsie<Box[]>}  {Promise<Box[]>}
      * @memberof HandDetector
      */
     async detect(image) {
@@ -88,12 +88,15 @@ export class HandDetector {
 
         const netTensor = new Tensor("float32", float32Data, MODEL_INPUT_SHAPE);
 
-        const { output0 } = await this.net.run({ images: netTensor }); // Get raw output
-        const { selected } = await this.nms.run({ detection: output0, config: this.nmsConfig }); // Filter boxes
+        // Get raw output
+        const { output0 } = await this.net.run({ images: netTensor });
+        // Filter boxes
+        const { selected } = await this.nms.run({ detection: output0, config: this.nmsConfig });
 
         const boxes = [];
         for (let idx = 0; idx < selected.dims[1]; idx++) {
-            const data = selected.data.slice(idx * selected.dims[2], (idx + 1) * selected.dims[2]); // Get rows
+            // Get rows
+            const data = selected.data.slice(idx * selected.dims[2], (idx + 1) * selected.dims[2]);
             const box = data.slice(0, 4);
 
             // Upscale box

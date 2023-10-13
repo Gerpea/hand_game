@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useRef, useState } from "react";
-import { Box, useHandPosition } from "hand_detector";
+import { Box, useGestureClassification, useHandPosition } from "hand_detector";
 import styled from "styled-components";
 import GestureCard from "@/components/GestureCard";
 import HandCard from "@/components/HandCard";
@@ -39,6 +39,7 @@ export default function DevHome() {
     iouThreshold: 0.6,
     topk: 2,
   });
+  const { classify } = useGestureClassification();
 
   const addSample = useCallback((sample: Sample) => {
     samplesRef.current.push(sample);
@@ -90,9 +91,15 @@ export default function DevHome() {
         // @ts-ignore
         timeoutId = undefined;
 
-        console.time("Detection");
+        // console.time("Detection");
         const boxes = await detect(cameraImage);
-        console.timeEnd("Detection");
+        // console.timeEnd("Detection");
+        if (boxes[0]) {
+          console.time("Classification");
+          const results = await classify(cameraImage, boxes[0]);
+          console.timeEnd("Classification");
+          console.log(results);
+        }
         if (boxes[0] && recordSamples.current) {
           addSample({
             gesture: gesture.label,
@@ -103,7 +110,7 @@ export default function DevHome() {
         setBoxes(boxes);
       })();
     }, 300);
-  }, [cameraImage, detect, gesture, addSample]);
+  }, [cameraImage, detect, classify, gesture, addSample]);
 
   return (
     <>

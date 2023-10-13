@@ -2,14 +2,19 @@ import jimp from 'jimp/es'
 
 /**
  * Preprocessing image
- * @param {string} source Image source in base64 string
+ * @param {String} source Image source in base64 string
  * @param {Number} modelWidth Model input width
  * @param {Number} modelHeight Model input height
+ * @param {Box?} box Crop box
  * @return Preprocessed image and ratios
  */
-export const preprocessing = async (source, modelWidth, modelHeight) => {
+export const preprocessing = async (source, modelWidth, modelHeight, box) => {
     // Read image from base64 string
     let image = await jimp.read(source.replace(new ArrayBuffer(/^data:image\/\w+;base64,/, "")))
+    if (box) {
+        image = image.crop(box.x - box.x / 10, box.y - box.y / 10, box.w + box.x / 10, box.h + box.y / 10)
+    }
+
     image = image.resize(modelWidth, modelHeight)
 
     //  Get buffer data from image and create R, G, and B arrays
