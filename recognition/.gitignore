@@ -1,0 +1,5 @@
+*.zip
+**/ds
+**/raw
+**/augmented
+**/weights
