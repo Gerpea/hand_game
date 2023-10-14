@@ -38,6 +38,7 @@ export type Box = {
 }
 
 export type GestureClass = {
+    id: number;
     label: string;
     probability: number;
 }

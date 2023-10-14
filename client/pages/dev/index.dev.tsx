@@ -113,7 +113,7 @@ export default function DevHome() {
         }
         setBoxes(boxes);
       })();
-    }, 300);
+    }, 1200);
   }, [cameraImage, detect, classify, gesture, addSample]);
 
   return (
@@ -125,7 +125,7 @@ export default function DevHome() {
       <p>Then press the spacebar and wait a 3 seconds</p>
       <p>Repeat</p>
       <StyledContainer>
-        <GestureCard gesture={gesture.label} />
+        <GestureCard gesture={gesture} />
         <HandCard imgSrc={cameraImage} boxes={boxes} />
       </StyledContainer>
       {recordSamples.current && <p>Recording samples...</p>}

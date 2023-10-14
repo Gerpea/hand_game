@@ -1,6 +1,7 @@
 import React from "react";
 import styled from "styled-components";
 import Card from "./Card";
+import { Gesture } from "@/types";
 
 const StyledGestureCard = styled(Card)`
   background-color: #ffe58b;
@@ -11,13 +12,13 @@ const StyledGestureCard = styled(Card)`
 `;
 
 type Props = {
-  gesture: string;
+  gesture: Gesture;
 };
 
 const GestureCard: React.FC<Props> = ({ gesture }) => {
   return (
     <StyledGestureCard>
-      <span>{gesture}</span>
+      <span>{gesture.label}</span>
     </StyledGestureCard>
   );
 };
