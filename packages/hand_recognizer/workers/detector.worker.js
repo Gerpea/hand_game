@@ -2,10 +2,13 @@
 import { HandDetector } from './handDetector'
 
 const detector = new HandDetector()
-detector.initialize()
 
 globalThis.onmessage = async function ({ data: { type, data } }) {
     switch (type) {
+        case 'init':
+            await detector.initialize()
+            self.postMessage({ type: 'init', data: true })
+            return
         case 'params':
             detector.setParams(data)
             return

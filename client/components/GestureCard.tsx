@@ -1,4 +1,4 @@
-import React from "react";
+import React, { HTMLAttributes } from "react";
 import styled from "styled-components";
 import Card from "./Card";
 import { Gesture } from "@/types";
@@ -15,9 +15,12 @@ type Props = {
   gesture: Gesture;
 };
 
-const GestureCard: React.FC<Props> = ({ gesture }) => {
+const GestureCard: React.FC<Props & HTMLAttributes<HTMLDivElement>> = ({
+  gesture,
+  ...props
+}) => {
   return (
-    <StyledGestureCard>
+    <StyledGestureCard {...props}>
       <span>{gesture.label}</span>
     </StyledGestureCard>
   );

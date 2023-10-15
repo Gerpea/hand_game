@@ -1,30 +1,70 @@
-import styled from "styled-components";
+import styled, { keyframes } from "styled-components";
 import GestureCard from "@/components/GestureCard";
 import HandCard from "@/components/HandCard";
 import { useCameraImage } from "@/hooks";
 import { useGesture } from "@/hooks/useGesture";
+import { useEffect, useMemo, useRef, useState } from "react";
+
 import {
   Box,
   useGestureClassification,
   useHandPosition,
 } from "hand_recognizer";
-import { useEffect, useRef, useState } from "react";
+import Loader from "@/components/Loader";
+
+const appearance = keyframes`
+  0% {
+    box-shadow: none;
+    transform: scale(0.9);
+    opacity: 0;
+  }
+  50% {
+    transform: scale(1);
+    opacity: 1;
+  }
+  75% {
+    transform: scale(1) translateX(0%);
+    opacity: 1;
+  }
+  100% {
+    box-shadow: 0px 0px 8px 2px rgba(34, 60, 80, 0.25);
+    transform: scale(1) translateX(0%);
+    opacity: 1;
+  }
+`;
 
 const StyledContainer = styled.div`
   display: flex;
-  column-gap: 16px;
+  column-gap: 1rem;
+`;
+
+const StyledGestureCard = styled(GestureCard)`
+  animation: ${appearance} 0.5s ease;
+`;
+const StyledHandCard = styled(HandCard)`
+  animation: ${appearance} 0.5s ease;
 `;
 
 export default function Home() {
   const cameraImage = useCameraImage();
   const { gesture, nextGesture } = useGesture();
-  const { detect } = useHandPosition();
-  const { classify } = useGestureClassification();
+  const { detect, inited: handPositionInited } = useHandPosition();
+  const { classify, inited: gestureClassificationInited } =
+    useGestureClassification();
   const timerId = useRef<NodeJS.Timeout>();
   const [boxes, setBoxes] = useState<Box[]>([]);
+  const isLoading = useMemo(
+    () => !handPositionInited || !gestureClassificationInited,
+    [handPositionInited, gestureClassificationInited]
+  );
 
   useEffect(() => {
-    if (!cameraImage || timerId.current) {
+    if (
+      !cameraImage ||
+      timerId.current ||
+      !handPositionInited ||
+      !gestureClassificationInited
+    ) {
       return;
     }
 
@@ -46,12 +86,26 @@ export default function Home() {
         nextGesture();
       }
     }, 1000);
-  }, [gesture, detect, classify, cameraImage, nextGesture]);
+  }, [
+    gesture,
+    detect,
+    classify,
+    cameraImage,
+    nextGesture,
+    handPositionInited,
+    gestureClassificationInited,
+  ]);
 
   return (
     <StyledContainer>
-      <GestureCard gesture={gesture} />
-      <HandCard imgSrc={cameraImage} boxes={boxes} />
+      {isLoading ? (
+        <Loader />
+      ) : (
+        <>
+          <StyledGestureCard gesture={gesture} />
+          <StyledHandCard imgSrc={cameraImage} boxes={boxes} />
+        </>
+      )}
     </StyledContainer>
   );
 }

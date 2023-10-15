@@ -1,11 +1,20 @@
-import { useEffect, useRef } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { Box, DetectorWorker, Params } from "../types";
 
 export const useHandPosition = (params?: Partial<Params>) => {
     const workerRef = useRef<DetectorWorker>();
+    const [inited, setInited] = useState(false);
 
     useEffect(() => {
         workerRef.current = new Worker(new URL('../../workers/detector.worker.js', import.meta.url))
+        workerRef.current.onmessage = function (msg: any) {
+            switch (msg.data.type) {
+                case 'init':
+                    setInited(msg.data.data)
+                    return
+            }
+        }
+        workerRef.current.postMessage({ type: 'init' })
     }, [])
 
     useEffect(() => {
@@ -16,7 +25,11 @@ export const useHandPosition = (params?: Partial<Params>) => {
         workerRef.current.postMessage({ type: 'params', data: params })
     }, [params])
 
-    const detect = async (image: string): Promise<Box[]> => {
+    const detect = useCallback<(image: string) => Promise<Box[]>>(async (image) => {
+        if (!inited) {
+            return Promise.reject("Worker is not initialized yet");
+        }
+
         return new Promise((resolve, reject) => {
             if (!workerRef.current) {
                 reject("Worker doesn't set")
@@ -33,9 +46,10 @@ export const useHandPosition = (params?: Partial<Params>) => {
 
             workerRef.current.postMessage({ type: 'image', data: image })
         })
-    }
+    }, [inited])
 
     return {
-        detect
+        detect,
+        inited
     }
 }

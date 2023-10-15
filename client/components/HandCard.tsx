@@ -1,14 +1,24 @@
-import React, { useEffect, useRef } from "react";
+import React, { HTMLAttributes, useEffect, useRef } from "react";
 import { Box } from "hand_detector";
 import Card from "./Card";
 import { renderBoxes } from "@/utils";
+import styled from "styled-components";
 
 type Props = {
   imgSrc?: string;
   boxes?: Box[];
 };
 
-const HandCard: React.FC<Props> = ({ imgSrc, boxes }) => {
+const StyledHandCard = styled(Card)`
+  overflow: hidden;
+  position: relative;
+`;
+
+const HandCard: React.FC<Props & HTMLAttributes<HTMLDivElement>> = ({
+  imgSrc,
+  boxes,
+  ...props
+}) => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const drawCanvasRef = useRef<HTMLCanvasElement>(null);
   const canvasCtx = useRef<CanvasRenderingContext2D | null>();
@@ -58,7 +68,7 @@ const HandCard: React.FC<Props> = ({ imgSrc, boxes }) => {
   }, [imgSrc]);
 
   return (
-    <Card>
+    <StyledHandCard {...props}>
       <canvas
         ref={canvasRef}
         width="416"
@@ -73,7 +83,7 @@ const HandCard: React.FC<Props> = ({ imgSrc, boxes }) => {
           style={{ position: "absolute" }}
         />
       )}
-    </Card>
+    </StyledHandCard>
   );
 };
 
