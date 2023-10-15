@@ -4,13 +4,14 @@ import HandCard from "@/components/HandCard";
 import { useCameraImage } from "@/hooks";
 import { useGesture } from "@/hooks/useGesture";
 import { useEffect, useMemo, useRef, useState } from "react";
-
 import {
   Box,
   useGestureClassification,
   useHandPosition,
 } from "hand_recognizer";
 import Loader from "@/components/Loader";
+import Card from "@/components/Card";
+import { OptionsModal } from "@/components/Modal";
 
 const appearance = keyframes`
   0% {
@@ -42,6 +43,32 @@ const StyledGestureCard = styled(GestureCard)`
   animation: ${appearance} 0.5s ease;
 `;
 const StyledHandCard = styled(HandCard)`
+  animation: ${appearance} 0.5s ease;
+`;
+
+const StyledOptionsButton = styled(Card)`
+  width: 3rem;
+  height: 3rem;
+  background-color: orange;
+
+  border-top-right-radius: 0;
+  border-top-left-radius: 0;
+
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  margin-left: auto;
+  margin-right: auto;
+
+  cursor: pointer;
+
+  transition: all 0.33s ease;
+
+  &:hover {
+    transform: scale(1.1);
+  }
+
   animation: ${appearance} 0.5s ease;
 `;
 
@@ -96,16 +123,21 @@ export default function Home() {
     gestureClassificationInited,
   ]);
 
+  const [isOpen, setIsOpen] = useState(false);
   return (
     <StyledContainer>
       {isLoading ? (
         <Loader />
       ) : (
         <>
+          <StyledOptionsButton onClick={() => setIsOpen(true)} />
           <StyledGestureCard gesture={gesture} />
           <StyledHandCard imgSrc={cameraImage} boxes={boxes} />
         </>
       )}
+      <OptionsModal isOpen={isOpen} onClose={() => setIsOpen(false)}>
+        Copy this
+      </OptionsModal>
     </StyledContainer>
   );
 }

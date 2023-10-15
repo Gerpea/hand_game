@@ -7,7 +7,7 @@ const gestures = GESTURES;
 export const useGesture = () => {
   const iRef = useRef(0);
   const [gesture, setGesture] = useState<Gesture>(gestures[iRef.current]);
-  
+
   const nextGesture = useCallback(() => {
     iRef.current = iRef.current + 1;
     if (iRef.current >= gestures.length) {

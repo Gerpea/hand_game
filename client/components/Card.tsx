@@ -1,4 +1,4 @@
-import React, { PropsWithChildren } from "react";
+import React, { forwardRef } from "react";
 import styled from "styled-components";
 
 const StyledCard = styled.div`
@@ -9,10 +9,15 @@ const StyledCard = styled.div`
   overflow: hidden;
 `;
 
-const Card: React.FC<
-  PropsWithChildren<React.HTMLAttributes<HTMLDivElement>>
-> = ({ children, ...props }) => {
-  return <StyledCard {...props}>{children}</StyledCard>;
-};
+const Card = forwardRef<
+  React.HTMLAttributes<HTMLDivElement>,
+  React.HTMLAttributes<HTMLDivElement>
+>(function Card({ children, ...props }, ref) {
+  return (
+    <StyledCard {...props} ref={ref as any}>
+      {children}
+    </StyledCard>
+  );
+});
 
 export default Card;

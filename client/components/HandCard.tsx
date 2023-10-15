@@ -1,5 +1,5 @@
 import React, { HTMLAttributes, useEffect, useRef } from "react";
-import { Box } from "hand_detector";
+import { Box } from "hand_recognizer";
 import Card from "./Card";
 import { renderBoxes } from "@/utils";
 import styled from "styled-components";
