@@ -9,10 +9,11 @@
     "packages/**"
   ],
   "scripts": {
-    "client:dev": "npm run dev --workspace=client",
-    "server:dev": "npm run start:dev --workspace=server",
     "start": "concurrently 'npm:server:dev' 'npm:client:dev'",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "client:dev": "npm run dev --workspace=client",
+    "server:dev": "concurrently 'npm:redis:start' && wait-on tcp:6379 && npm run start:dev --workspace=server",
+    "redis:start": "docker-compose up -d",
+    "redis:stop": "docker-compose down"
   },
   "repository": {
     "type": "git",
@@ -25,6 +26,7 @@
   },
   "homepage": "https://github.com/Gerpea/hand_game#readme",
   "devDependencies": {
-    "concurrently": "^8.2.1"
+    "concurrently": "^8.2.1",
+    "wait-on": "^7.0.1"
   }
 }
