@@ -2,7 +2,7 @@ import { useCallback, useRef, useState } from "react";
 import { GESTURES } from "hand_recognizer";
 import { Gesture } from "@/types";
 
-const gestures = GESTURES;
+const gestures = GESTURES
 
 export const useGesture = () => {
   const iRef = useRef(0);

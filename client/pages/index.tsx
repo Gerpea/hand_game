@@ -1,7 +1,7 @@
 import styled, { keyframes } from "styled-components";
 import GestureCard from "@/components/GestureCard";
 import HandCard from "@/components/HandCard";
-import { useCameraImage } from "@/hooks";
+import { useApi, useCameraImage, useGame } from "@/hooks";
 import { useGesture } from "@/hooks/useGesture";
 import { useEffect, useMemo, useRef, useState } from "react";
 import {
@@ -12,6 +12,8 @@ import {
 import Loader from "@/components/Loader";
 import Card from "@/components/Card";
 import { OptionsModal } from "@/components/Modal";
+import { ToastContainer } from "react-toastify";
+import { useRouter } from "next/router";
 
 const appearance = keyframes`
   0% {
@@ -73,6 +75,7 @@ const StyledOptionsButton = styled(Card)`
 `;
 
 export default function Home() {
+  const { id } = useRouter().query;
   const cameraImage = useCameraImage();
   const { gesture, nextGesture } = useGesture();
   const { detect, inited: handPositionInited } = useHandPosition();
@@ -84,6 +87,16 @@ export default function Home() {
     () => !handPositionInited || !gestureClassificationInited,
     [handPositionInited, gestureClassificationInited]
   );
+  const { addScore, createGame, joinGame } = useApi();
+  const { scores, userID, gameID, users } = useGame();
+
+  useEffect(() => {
+    if (id) {
+      joinGame(id as string);
+    } else {
+      createGame();
+    }
+  }, [id, joinGame, createGame]);
 
   useEffect(() => {
     if (
@@ -110,6 +123,7 @@ export default function Home() {
       )[0];
 
       if (topClass.probability > 0.9 && topClass.id === gesture.id) {
+        addScore();
         nextGesture();
       }
     }, 1000);
@@ -121,23 +135,26 @@ export default function Home() {
     nextGesture,
     handPositionInited,
     gestureClassificationInited,
+    addScore,
   ]);
 
   const [isOpen, setIsOpen] = useState(false);
   return (
-    <StyledContainer>
-      {isLoading ? (
-        <Loader />
-      ) : (
-        <>
-          <StyledOptionsButton onClick={() => setIsOpen(true)} />
-          <StyledGestureCard gesture={gesture} />
-          <StyledHandCard imgSrc={cameraImage} boxes={boxes} />
-        </>
-      )}
-      <OptionsModal isOpen={isOpen} onClose={() => setIsOpen(false)}>
-        Copy this
-      </OptionsModal>
-    </StyledContainer>
+    <>
+      <StyledContainer>
+        {isLoading ? (
+          <Loader />
+        ) : (
+          <>
+            <p>Score: {scores[userID]}</p>
+            <StyledOptionsButton onClick={() => setIsOpen(true)} />
+            <StyledGestureCard gesture={gesture} />
+            <StyledHandCard imgSrc={cameraImage} boxes={boxes} />
+          </>
+        )}
+      </StyledContainer>
+      <OptionsModal isOpen={isOpen} onClose={() => setIsOpen(false)} />
+      <ToastContainer position="bottom-center" />
+    </>
   );
 }

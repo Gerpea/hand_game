@@ -38,8 +38,8 @@ export class GameService {
 
     return {
       userID: userID,
-      gameID: gameID,
       accessToken: signedString,
+      game: createdGame,
     };
   }
 
@@ -68,6 +68,7 @@ export class GameService {
     return {
       userID: userID,
       accessToken: signedString,
+      game: joinedGame,
     };
   }
 

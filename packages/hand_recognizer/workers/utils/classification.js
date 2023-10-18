@@ -8,7 +8,7 @@ import { GESTURE_CLASSES } from "../const";
  */
 export function labelProbs(probs) {
     return probs.map((prob, i) => ({
-        id: i,
+        id: i.toString(),
         label: GESTURE_CLASSES[i],
         probability: prob
 

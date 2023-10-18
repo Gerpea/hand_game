@@ -2,12 +2,13 @@
 
 import { StyledComponentsRegistry } from "@/styles/registry";
 import { GlobalStyles } from "@/styles/global";
+import { PropsWithChildren } from "react";
 
-export const Providers = (props: React.PropsWithChildren) => {
+export const Providers = ({ children }: PropsWithChildren) => {
   return (
     <StyledComponentsRegistry>
       <GlobalStyles />
-      {props.children}
+      {children}
     </StyledComponentsRegistry>
   );
 };
