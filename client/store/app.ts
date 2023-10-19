@@ -3,6 +3,7 @@ import { Game } from '@/types'
 import jwtDecode from 'jwt-decode'
 import { toast } from 'react-toastify'
 import { StateCreator, create } from 'zustand'
+import { devtools, persist } from 'zustand/middleware'
 
 type State = {
     game: Game;
@@ -13,7 +14,7 @@ type State = {
 type Actions = {
     addScore: () => void;
     joinGame: (gameID: string) => void;
-    createGame: () => void;
+    createGame: () => Promise<string | undefined>;
 }
 const initialState: State = {
     game: {
@@ -26,11 +27,12 @@ const initialState: State = {
 }
 
 const state: StateCreator<State & Actions, [], []> = (set, get) => {
-    let socket: SocketWithActions;
+    let socket: SocketWithActions | undefined;
 
-    const createSocket = (accessToken: string) => createSocketWithHandlers({
+    const createSocket = (accessToken: string, gameID: string) => createSocketWithHandlers({
         accessToken,
-        onScore(game, userID) {
+        gameID,
+        onScore(game) {
             set({ game })
         },
         onUserConnected(game, userID) {
@@ -40,7 +42,9 @@ const state: StateCreator<State & Actions, [], []> = (set, get) => {
             set({ game })
         },
         onUserDisconnected(game, userID) {
-            toast(`User with id ${userID} diconnected`)
+            if (userID !== get().userID) {
+                toast(`User with id ${userID} diconnected`)
+            }
             set({ game })
         },
         onError(error) {
@@ -51,17 +55,26 @@ const state: StateCreator<State & Actions, [], []> = (set, get) => {
     return {
         ...initialState,
         addScore() {
-            if (!socket) {
-                socket = createSocket(get().accessToken)
+            if (Object.values(get().game.users).filter((active) => active).length > 1) {
+                socket?.addScore()
             }
-            socket.addScore()
         },
         async joinGame(gameID: string) {
-            const { data, error } = await joinGame(gameID)
-            if (error) {
-                toast.error(error.messages[0])
+            if (get().accessToken) {
+                socket?.disconnect()
+                socket = createSocket(get().accessToken, gameID)
                 return
             }
+
+            const { data, error } = await joinGame(gameID)
+            if (error) {
+                toast.error(error.message)
+                get().createGame()
+                return
+            }
+
+            socket?.disconnect()
+            socket = createSocket(data.accessToken, gameID)
 
             set({ accessToken: data.accessToken, game: data.game, userID: jwtDecode<JTWPayload>(data.accessToken).sub })
 
@@ -69,14 +82,18 @@ const state: StateCreator<State & Actions, [], []> = (set, get) => {
         async createGame() {
             const { data, error } = await createGame()
             if (error) {
-                toast.error(error.messages[0])
+                toast.error(error.message)
                 return
             }
 
+            socket?.disconnect()
+            socket = createSocket(data.accessToken, data.game.id)
+
             set({ accessToken: data.accessToken, game: data.game, userID: jwtDecode<JTWPayload>(data.accessToken).sub })
 
-        }
+            return data.game.id
+        },
     }
 }
 
-export const useStore = create<State & Actions>(state)
+export const useStore = create<State & Actions>()(devtools(persist(state, { name: 'game-storage', partialize: (state) => ({ accessToken: state.accessToken, userID: state.userID }) })))

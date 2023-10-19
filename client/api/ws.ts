@@ -6,6 +6,7 @@ export const socketIOUrl = `http://${process.env.NEXT_PUBLIC_API_HOST}:${process
 
 type CreateSocketOptions = {
     accessToken: string;
+    gameID: string;
     onConnect?: () => void;
     onError?: (error: string) => void;
     onUserConnected?: (game: Game, userID: string) => void;
@@ -16,6 +17,7 @@ type CreateSocketOptions = {
 
 export const createSocketWithHandlers = ({
     accessToken,
+    gameID,
     onConnect,
     onError,
     onUserConnected,
@@ -24,7 +26,8 @@ export const createSocketWithHandlers = ({
 }: CreateSocketOptions): SocketWithActions => {
     const socket = <SocketWithActions>io(socketIOUrl, {
         auth: {
-            token: accessToken
+            token: accessToken,
+            gameID,
         },
         transports: ['websocket', 'polling']
     })

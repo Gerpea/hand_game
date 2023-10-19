@@ -2,6 +2,7 @@ import React, { HTMLAttributes, useCallback, useEffect, useState } from "react";
 import styled, { keyframes } from "styled-components";
 import Card from "../Card";
 import { createPortal } from "react-dom";
+import { BiX } from "react-icons/bi";
 
 const appearance = keyframes`
   0% {
@@ -76,8 +77,7 @@ const StyledOverlayContainer = styled.div<{ $isClosing: boolean }>`
 const StyledModalContainer = styled(Card)<{ $isClosing: boolean }>`
   width: 30%;
   height: auto;
-  min-height: 30%;
-  background-color: orange;
+  background-color: #fe8033;
   box-shadow: none;
 
   animation: ${({ $isClosing }) => ($isClosing ? disappearance : appearance)}
@@ -89,16 +89,22 @@ const StyledModalContainer = styled(Card)<{ $isClosing: boolean }>`
   align-items: center;
   position: relative;
   overflow: visible;
-  padding: 0.5rem;
-  padding-bottom: 0;
+  padding: 1rem;
 `;
 
 export const StyledModalBody = styled.div`
   display: flex;
+  flex-direction: column;
   align-items: center;
   justify-content: center;
   margin-top: auto;
   margin-bottom: auto;
+  padding-bottom: 1.5rem;
+  width: 100%;
+`;
+
+export const StyledModalTitle = styled.h2`
+  text-align: center;
 `;
 
 export const StyledModalFooter = styled.div`
@@ -106,19 +112,7 @@ export const StyledModalFooter = styled.div`
   align-items: center;
   justify-content: center;
   justify-self: flex-end;
-  height: 3rem;
-  width: calc(100% + 1rem);
-  margin-left: -0.5rem;
-  margin-right: -0.5rem;
-  border-bottom-left-radius: 0.5rem;
-  border-bottom-right-radius: 0.5rem;
-  box-shadow: 0px 0px 8px 2px rgba(34, 60, 80, 0.25) inset;
-
-  cursor: pointer;
-  transition: all 0.15s linear;
-  &:hover {
-    box-shadow: 0px 0px 8px 8px rgba(34, 60, 80, 0.25) inset;
-  }
+  width: 100%;
 `;
 
 const StyledCloseButton = styled(Card)`
@@ -126,15 +120,27 @@ const StyledCloseButton = styled(Card)`
   height: 2rem;
   top: -1rem;
   right: -1rem;
-  background-color: orange;
+  background-color: #fe8033;
   position: absolute;
   box-shadow: none;
-  color: black;
-  text-align: center;
   cursor: pointer;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
 
   &:hover {
     transform: scale(1.1);
+  }
+`;
+const StyledCloseIcon = styled(BiX)`
+  width: 100%;
+  height: 100%;
+
+  opacity: 0.5;
+
+  &:hover {
+    opacity: 1;
   }
 `;
 
@@ -143,6 +149,7 @@ export type Props = {
   onClose: () => void;
   onAccept?: () => void;
 };
+
 export const ModalBase: React.FC<Props & HTMLAttributes<HTMLDivElement>> = ({
   isOpen,
   onClose,
@@ -177,7 +184,9 @@ export const ModalBase: React.FC<Props & HTMLAttributes<HTMLDivElement>> = ({
         onAnimationEnd={handleAnimationEnd}
       >
         <StyledModalContainer onClick={stopPropagation} $isClosing={!isOpen}>
-          <StyledCloseButton onClick={onClose} />
+          <StyledCloseButton onClick={onClose}>
+            <StyledCloseIcon />
+          </StyledCloseButton>
           {children}
         </StyledModalContainer>
       </StyledOverlayContainer>,

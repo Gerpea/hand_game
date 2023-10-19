@@ -1,4 +1,5 @@
 import styled, { keyframes } from "styled-components";
+import { useRouter } from "next/router";
 import GestureCard from "@/components/GestureCard";
 import HandCard from "@/components/HandCard";
 import { useApi, useCameraImage, useGame } from "@/hooks";
@@ -9,11 +10,14 @@ import {
   useGestureClassification,
   useHandPosition,
 } from "hand_recognizer";
+import { HiPlay } from "react-icons/hi2";
 import Loader from "@/components/Loader";
 import Card from "@/components/Card";
 import { OptionsModal } from "@/components/Modal";
-import { ToastContainer } from "react-toastify";
-import { useRouter } from "next/router";
+import { ToastContainer, Zoom } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import Score from "@/components/Score";
+import { ScoreModal } from "@/components/Modal/ScoreModal";
 
 const appearance = keyframes`
   0% {
@@ -49,9 +53,14 @@ const StyledHandCard = styled(HandCard)`
 `;
 
 const StyledOptionsButton = styled(Card)`
-  width: 3rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  width: fit-content;
+  min-width: 3rem;
   height: 3rem;
-  background-color: orange;
+  background-color: #fe8033;
 
   border-top-right-radius: 0;
   border-top-left-radius: 0;
@@ -74,8 +83,29 @@ const StyledOptionsButton = styled(Card)`
   animation: ${appearance} 0.5s ease;
 `;
 
+const StyledOptionsIcon = styled(HiPlay)`
+  width: 2rem;
+  height: 2rem;
+`;
+
+const StyledToastContainer = styled(ToastContainer).attrs({
+  className: "toast-container",
+  toastClassName: "toast",
+})`
+  width: fit-content;
+  max-width: 50%;
+  color: inherit;
+
+  .toast {
+    background-color: rgba(254, 128, 51, 0.6);
+    color: inherit;
+    font: inherit;
+    border-radius: 8px;
+  }
+`;
+
 export default function Home() {
-  const { id } = useRouter().query;
+  const { query, isReady, push: routerPush } = useRouter();
   const cameraImage = useCameraImage();
   const { gesture, nextGesture } = useGesture();
   const { detect, inited: handPositionInited } = useHandPosition();
@@ -88,15 +118,26 @@ export default function Home() {
     [handPositionInited, gestureClassificationInited]
   );
   const { addScore, createGame, joinGame } = useApi();
-  const { scores, userID, gameID, users } = useGame();
+  const { users } = useGame();
 
   useEffect(() => {
-    if (id) {
-      joinGame(id as string);
-    } else {
-      createGame();
+    if (!isReady) {
+      return;
     }
-  }, [id, joinGame, createGame]);
+
+    if (query["id"]) {
+      joinGame(query["id"] as string);
+      return;
+    }
+
+    if (!query["id"]) {
+      (async () => {
+        const gameID = await createGame();
+        routerPush(`/${gameID}`);
+      })();
+      return;
+    }
+  }, [routerPush, query, isReady, joinGame, createGame]);
 
   useEffect(() => {
     if (
@@ -146,15 +187,31 @@ export default function Home() {
           <Loader />
         ) : (
           <>
-            <p>Score: {scores[userID]}</p>
-            <StyledOptionsButton onClick={() => setIsOpen(true)} />
+            <StyledOptionsButton onClick={() => setIsOpen(true)}>
+              {Object.values(users).filter((active) => active).length > 1 ? (
+                <Score />
+              ) : (
+                <StyledOptionsIcon />
+              )}
+            </StyledOptionsButton>
             <StyledGestureCard gesture={gesture} />
             <StyledHandCard imgSrc={cameraImage} boxes={boxes} />
           </>
         )}
       </StyledContainer>
-      <OptionsModal isOpen={isOpen} onClose={() => setIsOpen(false)} />
-      <ToastContainer position="bottom-center" />
+      {Object.values(users).filter((active) => active).length > 1 ? (
+        <ScoreModal isOpen={isOpen} onClose={() => setIsOpen(false)} />
+      ) : (
+        <OptionsModal isOpen={isOpen} onClose={() => setIsOpen(false)} />
+      )}
+      <StyledToastContainer
+        position="bottom-center"
+        autoClose={3000}
+        hideProgressBar
+        transition={Zoom}
+        closeButton={false}
+        icon={false}
+      />
     </>
   );
 }

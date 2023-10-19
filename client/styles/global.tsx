@@ -1,4 +1,9 @@
 import { createGlobalStyle } from "styled-components";
+import { Roboto_Mono } from "next/font/google";
+
+const robotoMono = Roboto_Mono({
+  subsets: ["latin", "cyrillic"],
+});
 
 export const GlobalStyles = createGlobalStyle`
 * {
@@ -17,5 +22,11 @@ body {
   align-items: center;
   justify-content: center;
   background-color: #adfbff;
+  color: #00020a;
+
+  ${robotoMono.style}
+
+  font-weight: bold;
+  text-transform: uppercase;
 }
 `;

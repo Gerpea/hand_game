@@ -68,7 +68,7 @@ const StyledLoader = styled.div`
     content: "";
     width: 100%;
     height: 100%;
-    background-color: orange;
+    background-color: #fe8033;
     border-radius: 0.5rem;
   }
 
@@ -77,7 +77,7 @@ const StyledLoader = styled.div`
     content: "";
     width: 100%;
     height: 100%;
-    background-color: orange;
+    background-color: #fe8033;
     border-radius: 0.5rem;
     animation: ${popout} 4s ease infinite;
   }

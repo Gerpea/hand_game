@@ -4,7 +4,7 @@ import Card from "./Card";
 import { Gesture } from "@/types";
 
 const StyledGestureCard = styled(Card)`
-  background-color: #ffe58b;
+  background-color: #fe8033;
 
   display: flex;
   align-items: center;

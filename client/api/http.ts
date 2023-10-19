@@ -36,14 +36,13 @@ const makeRequest = async <T>(
         const error =
             e instanceof Error
                 ? {
-                    messages: [
+                    message:
                         process.env.NODE_ENV === 'development'
                             ? e.message
                             : 'Unknown error',
-                    ],
                 }
                 : {
-                    messages: ['Unknown error'],
+                    message: 'Unknown error'
                 };
 
         return {

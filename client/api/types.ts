@@ -2,7 +2,7 @@ import { Game } from "@/types";
 import { Socket } from "socket.io-client";
 
 export type APIError = {
-    messages: string[];
+    message: string;
     statusCode?: number;
 }
 
