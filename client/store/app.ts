@@ -15,6 +15,7 @@ type Actions = {
     joinGame: (gameID: string) => void;
     createGame: () => Promise<string | undefined>;
     getToken: () => Promise<string | undefined>;
+    disconnect: () => void;
 }
 const initialState: State = {
     game: {
@@ -47,7 +48,9 @@ const state: StateCreator<State & Actions, [], []> = (set, get) => {
             }
             set({ game })
         },
-        onError(error) {
+        async onError(error) {
+            set({ game: initialState.game })
+            await get().createGame()
             toast.error(error)
         }
     })
@@ -72,7 +75,7 @@ const state: StateCreator<State & Actions, [], []> = (set, get) => {
         },
         async joinGame(gameID: string) {
             const accessToken = get().accessToken || await get().getToken()
-            if(!accessToken) {
+            if (!accessToken) {
                 return
             }
 
@@ -81,7 +84,7 @@ const state: StateCreator<State & Actions, [], []> = (set, get) => {
         },
         async createGame() {
             const accessToken = get().accessToken || await get().getToken()
-            if(!accessToken) {
+            if (!accessToken) {
                 return
             }
 
@@ -95,6 +98,9 @@ const state: StateCreator<State & Actions, [], []> = (set, get) => {
 
             return data.game.id
         },
+        disconnect() {
+            set({ game: initialState.game })
+        }
     }
 }
 

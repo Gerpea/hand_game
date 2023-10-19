@@ -52,7 +52,7 @@ export const ScoreModal: React.FC<Props & HTMLAttributes<HTMLDivElement>> = ({
   ...props
 }) => {
   const router = useRouter();
-  const { users, scores, userID } = useGame();
+  const { users, scores, userID, disconnect } = useGame();
   const myScore = useMemo(() => scores[userID] || 0, [scores, userID]);
   const opponentScore = useMemo(
     () =>
@@ -65,8 +65,9 @@ export const ScoreModal: React.FC<Props & HTMLAttributes<HTMLDivElement>> = ({
   );
 
   const handleDisconnect = useCallback(async () => {
+    disconnect();
     router.push("/");
-  }, [router]);
+  }, [router, disconnect]);
 
   return (
     <ModalBase {...props}>

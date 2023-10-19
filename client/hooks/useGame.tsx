@@ -6,5 +6,6 @@ export const useGame = () => {
     gameID: state.game.id,
     scores: state.game.scores,
     users: state.game.users,
+    disconnect: state.disconnect,
   }));
 };

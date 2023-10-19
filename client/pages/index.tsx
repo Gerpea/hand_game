@@ -122,7 +122,17 @@ export default function Home() {
   );
 
   const { addScore, createGame, joinGame } = useApi();
-  const { users } = useGame();
+  const { gameID, users } = useGame();
+
+    useEffect(() => {
+      if (!isReady) {
+        return;
+      }
+  
+      if (gameID && gameID !== query["id"]) {
+        routerPush(gameID)
+      }
+    },[routerPush, query, isReady, gameID] )
 
   useEffect(() => {
     if (!isReady) {
@@ -141,7 +151,6 @@ export default function Home() {
           routerPush(`/${gameID}`);
         }
       })();
-      return;
     }
   }, [routerPush, query, isReady, joinGame, createGame]);
 
