@@ -2,13 +2,7 @@ import { Injectable, Logger } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { GameRepository } from './game.repository';
 import { createGameID, createUserID } from 'src/ids';
-import {
-  AddScoreFields,
-  AddUserFields,
-  Game,
-  JoinGameFields,
-  RemoveUserFields,
-} from './types';
+import { AddScoreFields, AddUserFields, Game, RemoveUserFields } from './types';
 
 @Injectable()
 export class GameService {
@@ -19,37 +13,20 @@ export class GameService {
   ) {}
 
   async createGame() {
-    const userID = createUserID();
     const gameID = createGameID();
 
     const createdGame = await this.gameRepository.createGame({ gameID });
-    this.logger.debug(
-      `Creating token string for gameID: ${createdGame.id} and userID: ${userID}`,
-    );
-
-    const signedString = this.jwtService.sign({
-      sub: userID,
-    });
+    this.logger.debug(`Creating game with id: ${createdGame.id}`);
 
     return {
-      userID: userID,
-      accessToken: signedString,
       game: createdGame,
     };
   }
 
-  async joinGame({ gameID }: JoinGameFields) {
+  async getToken() {
     const userID = createUserID();
 
-    this.logger.debug(
-      `Fetching game with ID: ${gameID} for user with ID: ${userID}`,
-    );
-
-    const joinedGame = await this.gameRepository.getGame(gameID);
-
-    this.logger.debug(
-      `Creating token string for gameID: ${joinedGame.id} and userID: ${userID}`,
-    );
+    this.logger.debug(`Creating token string for userID: ${userID}`);
 
     const signedString = this.jwtService.sign({
       sub: userID,
@@ -58,7 +35,6 @@ export class GameService {
     return {
       userID: userID,
       accessToken: signedString,
-      game: joinedGame,
     };
   }
 

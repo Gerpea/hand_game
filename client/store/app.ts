@@ -1,6 +1,5 @@
-import { JTWPayload, SocketWithActions, createGame, createSocketWithHandlers, joinGame } from '@/api'
+import { SocketWithActions, createGame, createSocketWithHandlers, getToken } from '@/api'
 import { Game } from '@/types'
-import jwtDecode from 'jwt-decode'
 import { toast } from 'react-toastify'
 import { StateCreator, create } from 'zustand'
 import { devtools, persist } from 'zustand/middleware'
@@ -15,6 +14,7 @@ type Actions = {
     addScore: () => void;
     joinGame: (gameID: string) => void;
     createGame: () => Promise<string | undefined>;
+    getToken: () => Promise<string | undefined>;
 }
 const initialState: State = {
     game: {
@@ -59,37 +59,39 @@ const state: StateCreator<State & Actions, [], []> = (set, get) => {
                 socket?.addScore()
             }
         },
-        async joinGame(gameID: string) {
-            if (get().accessToken) {
-                socket?.disconnect()
-                socket = createSocket(get().accessToken, gameID)
+        async getToken() {
+            const { data, error } = await getToken()
+            if (error) {
+                toast.error(error.message)
                 return
             }
 
-            const { data, error } = await joinGame(gameID)
-            if (error) {
-                toast.error(error.message)
-                get().createGame()
+            set({ accessToken: data.accessToken, userID: data.userID })
+
+            return data.accessToken
+        },
+        async joinGame(gameID: string) {
+            const accessToken = get().accessToken || await get().getToken()
+            if(!accessToken) {
                 return
             }
 
             socket?.disconnect()
-            socket = createSocket(data.accessToken, gameID)
-
-            set({ accessToken: data.accessToken, game: data.game, userID: jwtDecode<JTWPayload>(data.accessToken).sub })
-
+            socket = createSocket(accessToken, gameID)
         },
         async createGame() {
-            const { data, error } = await createGame()
+            const accessToken = get().accessToken || await get().getToken()
+            if(!accessToken) {
+                return
+            }
+
+            const { data, error } = await createGame(accessToken)
             if (error) {
                 toast.error(error.message)
                 return
             }
 
-            socket?.disconnect()
-            socket = createSocket(data.accessToken, data.game.id)
-
-            set({ accessToken: data.accessToken, game: data.game, userID: jwtDecode<JTWPayload>(data.accessToken).sub })
+            set({ game: data.game })
 
             return data.game.id
         },

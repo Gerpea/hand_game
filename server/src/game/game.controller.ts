@@ -1,22 +1,23 @@
-import { Body, Controller, Logger, Post } from '@nestjs/common';
+import { Controller, Logger, Post, UseGuards } from '@nestjs/common';
 import { GameService } from './game.service';
-import { JoinGameDto } from './dtos';
+import { ControllerAuthGuard } from './controller-auth.guard';
 
 @Controller()
 export class GameController {
   private readonly logger = new Logger(GameController.name);
   constructor(private readonly gameService: GameService) {}
 
-  @Post()
-  async createGame() {
-    const result = await this.gameService.createGame();
+  @Post('token')
+  async getToken() {
+    const result = await this.gameService.getToken();
 
     return result;
   }
 
-  @Post('join')
-  async joinGame(@Body() joinGameDto: JoinGameDto) {
-    const result = await this.gameService.joinGame(joinGameDto);
+  @UseGuards(ControllerAuthGuard)
+  @Post('create')
+  async createGame() {
+    const result = await this.gameService.createGame();
 
     return result;
   }

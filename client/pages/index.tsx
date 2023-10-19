@@ -106,17 +106,21 @@ const StyledToastContainer = styled(ToastContainer).attrs({
 
 export default function Home() {
   const { query, isReady, push: routerPush } = useRouter();
+
   const cameraImage = useCameraImage();
   const { gesture, nextGesture } = useGesture();
   const { detect, inited: handPositionInited } = useHandPosition();
   const { classify, inited: gestureClassificationInited } =
     useGestureClassification();
+
   const timerId = useRef<NodeJS.Timeout>();
   const [boxes, setBoxes] = useState<Box[]>([]);
+
   const isLoading = useMemo(
     () => !handPositionInited || !gestureClassificationInited,
     [handPositionInited, gestureClassificationInited]
   );
+
   const { addScore, createGame, joinGame } = useApi();
   const { users } = useGame();
 
@@ -133,7 +137,9 @@ export default function Home() {
     if (!query["id"]) {
       (async () => {
         const gameID = await createGame();
-        routerPush(`/${gameID}`);
+        if (gameID) {
+          routerPush(`/${gameID}`);
+        }
       })();
       return;
     }

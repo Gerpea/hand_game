@@ -15,10 +15,6 @@ export type Game = {
   scores: Scores;
 };
 
-export type JoinGameFields = {
-  gameID: string;
-};
-
 export type AddUserFields = {
   gameID: string;
   userID: string;

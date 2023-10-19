@@ -9,13 +9,15 @@ type MakeRequestResponse<T> = {
 
 const makeRequest = async <T>(
     endpoint: string,
-    reqInit?: RequestInit
+    reqInit?: RequestInit,
+    accessToken?: string
 ): Promise<MakeRequestResponse<T>> => {
     try {
         const response = await fetch(`${baseApiUrl}${endpoint}`, {
             mode: 'cors',
             headers: {
                 'Content-Type': 'application/json',
+                ...(accessToken ? { 'Authorization': accessToken } : {})
             },
             ...reqInit,
         });
@@ -52,17 +54,14 @@ const makeRequest = async <T>(
     }
 };
 
-export const createGame = async () => {
-    return makeRequest<CreateGameResponse>('/', {
+export const createGame = async (accessToken: string) => {
+    return makeRequest<CreateGameResponse>('/create', {
         method: 'POST'
-    })
+    }, accessToken)
 }
 
-export const joinGame = async (gameID: string) => {
-    return makeRequest<JoinGameResponse>('/join', {
+export const getToken = async () => {
+    return makeRequest<JoinGameResponse>('/token', {
         method: 'POST',
-        body: JSON.stringify({
-            gameID
-        })
     })
 }
