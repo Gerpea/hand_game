@@ -50,23 +50,22 @@ export class GameGateway
       `Total clients connected to room '${roomName}': ${connectedClients}`,
     );
 
-    const updatedGame = await this.gameServcie.addUser({
-      gameID: gameID,
-      userID: userID,
-    });
+    try {
+      const updatedGame = await this.gameServcie.addUser({
+        gameID: gameID,
+        userID: userID,
+      });
 
-    this.io.to(roomName).emit('user_connected', updatedGame, userID);
+      this.io.to(roomName).emit('user_connected', updatedGame, userID);
+    } catch (e) {
+      this.io.to(roomName).emit('exception', e.message);
+    }
   }
 
   async handleDisconnect(client: SocketWithAuth) {
     const sockets = this.io.sockets;
 
     const { gameID, userID } = client;
-    const updatedGame = await this.gameServcie.removeUser({
-      gameID,
-      userID,
-    });
-
     const roomName = gameID;
     const clientCount = this.io.adapter.rooms?.get(roomName)?.size ?? 0;
 
@@ -77,8 +76,17 @@ export class GameGateway
       `Total clients connected to room '${roomName}': ${clientCount}`,
     );
 
-    if (updatedGame) {
-      this.io.to(gameID).emit('user_disconnected', updatedGame, userID);
+    try {
+      const updatedGame = await this.gameServcie.removeUser({
+        gameID,
+        userID,
+      });
+
+      if (updatedGame) {
+        this.io.to(gameID).emit('user_disconnected', updatedGame, userID);
+      }
+    } catch (e) {
+      this.io.to(roomName).emit('exception', e.message);
     }
   }
 

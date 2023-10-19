@@ -1,4 +1,5 @@
 import {
+  BadRequestException,
   Inject,
   Injectable,
   InternalServerErrorException,
@@ -105,7 +106,7 @@ export class GameRepository {
       this.logger.error(
         `Failed to add a score for userID: ${userID} to gameID: ${gameID}`,
       );
-      throw e;
+      throw new BadRequestException(`game with gameID: ${gameID} do not exist`);
     }
   }
 
@@ -137,7 +138,7 @@ export class GameRepository {
       this.logger.error(
         `Failed to add a user with userID: ${userID} to gameID: ${gameID}`,
       );
-      throw e;
+      throw new BadRequestException(`game with gameID: ${gameID} do not exist`);
     }
   }
 
@@ -169,7 +170,7 @@ export class GameRepository {
       this.logger.error(
         `Failed to remove a user with userID: ${userID} from gameID: ${gameID}`,
       );
-      throw e;
+      throw new BadRequestException(`game with gameID: ${gameID} do not exist`);
     }
   }
 }

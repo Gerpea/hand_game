@@ -1,11 +1,31 @@
-import { ArgumentsHost, Catch, ExceptionFilter } from '@nestjs/common';
+import {
+  ArgumentsHost,
+  BadRequestException,
+  Catch,
+  WsExceptionFilter,
+} from '@nestjs/common';
 import { SocketWithAuth } from 'src/game/types';
-import { WsTypeException, WsUnknownException } from './ws-exceptions';
+import {
+  WsBadRequestException,
+  WsTypeException,
+  WsUnknownException,
+} from './ws-exceptions';
 
 @Catch()
-export class WsCatchAllFilter implements ExceptionFilter {
+export class WsCatchAllFilter implements WsExceptionFilter {
   catch(exception: Error, host: ArgumentsHost) {
     const socket: SocketWithAuth = host.switchToWs().getClient();
+
+    if (exception instanceof BadRequestException) {
+      const exceptionData = exception.getResponse();
+
+      const wsException = new WsBadRequestException(
+        exceptionData['message'] ?? 'Bad Request',
+      );
+
+      socket.emit('exception', wsException.getError());
+      return;
+    }
 
     if (exception instanceof WsTypeException) {
       socket.emit('exception', exception.getError());

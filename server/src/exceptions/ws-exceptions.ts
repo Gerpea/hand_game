@@ -16,6 +16,17 @@ export class WsTypeException extends WsException {
   }
 }
 
+export class WsBadRequestException extends WsTypeException {
+  constructor(message: string | unknown) {
+    super('BadRequest', message);
+  }
+}
+
+export class WsUnathorizedException extends WsTypeException {
+  constructor(message: string | unknown) {
+    super('Unathorized', message);
+  }
+}
 export class WsUnknownException extends WsTypeException {
   constructor(message: string | unknown) {
     super('Unknown', message);
