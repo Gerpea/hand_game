@@ -27,14 +27,9 @@ export class GameService {
       `Creating token string for gameID: ${createdGame.id} and userID: ${userID}`,
     );
 
-    const signedString = this.jwtService.sign(
-      {
-        gameID: createdGame.id,
-      },
-      {
-        subject: userID,
-      },
-    );
+    const signedString = this.jwtService.sign({
+      sub: userID,
+    });
 
     return {
       userID: userID,
@@ -56,14 +51,9 @@ export class GameService {
       `Creating token string for gameID: ${joinedGame.id} and userID: ${userID}`,
     );
 
-    const signedString = this.jwtService.sign(
-      {
-        gameID: joinedGame.id,
-      },
-      {
-        subject: userID,
-      },
-    );
+    const signedString = this.jwtService.sign({
+      sub: userID,
+    });
 
     return {
       userID: userID,

@@ -47,13 +47,15 @@ const createTokenMiddleware =
   (socket: SocketWithAuth, next) => {
     const token =
       socket.handshake.auth.token || socket.handshake.headers['token'];
+    const gameID =
+      socket.handshake.auth.gameID || socket.handshake.headers['gameID'];
 
     logger.debug(`Validating auth token before connection: ${token}`);
 
     try {
       const payload = jwtService.verify(token);
       socket.userID = payload.sub;
-      socket.gameID = payload.gameID;
+      socket.gameID = gameID;
       next();
     } catch {
       next(new Error('FORBIDDEN'));
