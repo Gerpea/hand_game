@@ -58,7 +58,7 @@ export class GameGateway
 
       this.io.to(roomName).emit('user_connected', updatedGame, userID);
     } catch (e) {
-      this.io.to(roomName).emit('exception', e.message);
+      this.io.to(roomName).emit('exception', e);
     }
   }
 
@@ -86,7 +86,7 @@ export class GameGateway
         this.io.to(gameID).emit('user_disconnected', updatedGame, userID);
       }
     } catch (e) {
-      this.io.to(roomName).emit('exception', e.message);
+      this.io.to(roomName).emit('exception', e);
     }
   }
 

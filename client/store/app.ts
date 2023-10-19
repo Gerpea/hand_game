@@ -49,9 +49,20 @@ const state: StateCreator<State & Actions, [], []> = (set, get) => {
             set({ game })
         },
         async onError(error) {
-            set({ game: initialState.game })
-            await get().createGame()
-            toast.error(error)
+            if (error.statusCode === 404) {
+                set({ game: initialState.game })
+                await get().createGame()
+                toast.error('Game not found, new game was created instead')
+                return
+            }
+            if (error.statusCode === 401 || error.statusCode === 403) {
+                await get().getToken()
+                get().joinGame(get().game.id)
+                toast.error('Access token just expired, creating new and rejoin to the game')
+                return
+            }
+
+            toast.error(error.message)
         }
     })
 
@@ -90,7 +101,12 @@ const state: StateCreator<State & Actions, [], []> = (set, get) => {
 
             const { data, error } = await createGame(accessToken)
             if (error) {
-                toast.error(error.message)
+                if (error.statusCode === 403) {
+                    await get().getToken()
+                    return get().createGame()
+                } else {
+                    toast.error(error.message)
+                }
                 return
             }
 

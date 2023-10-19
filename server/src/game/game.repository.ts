@@ -1,9 +1,9 @@
 import {
-  BadRequestException,
   Inject,
   Injectable,
   InternalServerErrorException,
   Logger,
+  NotFoundException,
 } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { Redis } from 'ioredis';
@@ -36,8 +36,7 @@ export class GameRepository {
     };
 
     this.logger.log(
-      `Creating new game: ${JSON.stringify(initialGame, null, 2)} with TTL ${
-        this.ttl
+      `Creating new game: ${JSON.stringify(initialGame, null, 2)} with TTL ${this.ttl
       }`,
     );
 
@@ -55,7 +54,7 @@ export class GameRepository {
       this.logger.error(
         `Failed to add game ${JSON.stringify(initialGame)}\n${e}`,
       );
-      throw new InternalServerErrorException();
+      throw new InternalServerErrorException('Something went wrong');
     }
   }
 
@@ -75,7 +74,7 @@ export class GameRepository {
       return JSON.parse(currentGame);
     } catch (e) {
       this.logger.error(`Failed to get gameID: ${gameID}`);
-      throw new InternalServerErrorException(`Failed to get gameID: ${gameID}`);
+      throw new NotFoundException(`Failed to get gameID: ${gameID}`);
     }
   }
 
@@ -106,7 +105,7 @@ export class GameRepository {
       this.logger.error(
         `Failed to add a score for userID: ${userID} to gameID: ${gameID}`,
       );
-      throw new BadRequestException(`game with gameID: ${gameID} do not exist`);
+      throw new NotFoundException(`game with gameID: ${gameID} do not exist`);
     }
   }
 
@@ -138,7 +137,7 @@ export class GameRepository {
       this.logger.error(
         `Failed to add a user with userID: ${userID} to gameID: ${gameID}`,
       );
-      throw new BadRequestException(`game with gameID: ${gameID} do not exist`);
+      throw new NotFoundException(`game with gameID: ${gameID} do not exist`);
     }
   }
 
@@ -170,7 +169,7 @@ export class GameRepository {
       this.logger.error(
         `Failed to remove a user with userID: ${userID} from gameID: ${gameID}`,
       );
-      throw new BadRequestException(`game with gameID: ${gameID} do not exist`);
+      throw new NotFoundException(`game with gameID: ${gameID} do not exist`);
     }
   }
 }
