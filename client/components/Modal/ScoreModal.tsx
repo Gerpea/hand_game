@@ -1,5 +1,4 @@
 import { HTMLAttributes, useCallback, useMemo } from "react";
-import { BiCopy } from "react-icons/bi";
 import {
   ModalBase,
   Props,
@@ -10,6 +9,7 @@ import {
 import { useGame } from "@/hooks";
 import styled from "styled-components";
 import { useRouter } from "next/router";
+import { useScopedI18n } from "@/locales";
 
 const StyledScores = styled.div`
   display: flex;
@@ -51,6 +51,8 @@ const StyledDisconnectButton = styled.div`
 export const ScoreModal: React.FC<Props & HTMLAttributes<HTMLDivElement>> = ({
   ...props
 }) => {
+  const t = useScopedI18n("scoreModal");
+
   const router = useRouter();
   const { users, scores, userID, disconnect } = useGame();
   const myScore = useMemo(() => scores[userID] || 0, [scores, userID]);
@@ -71,22 +73,22 @@ export const ScoreModal: React.FC<Props & HTMLAttributes<HTMLDivElement>> = ({
 
   return (
     <ModalBase {...props}>
-      <StyledModalTitle>Score Board</StyledModalTitle>
+      <StyledModalTitle>{t("title")}</StyledModalTitle>
       <StyledModalBody>
         <StyledScores>
           <StyledScore>
-            <span>YOU</span>
+            <span>{t("you")}</span>
             <span>{myScore}</span>
           </StyledScore>
           <StyledScore>
-            <span>OPPONENT</span>
+            <span>{t("opponent")}</span>
             <span>{opponentScore}</span>
           </StyledScore>
         </StyledScores>
       </StyledModalBody>
       <StyledModalFooter>
         <StyledDisconnectButton onClick={handleDisconnect}>
-          Disconnect
+          {t("disconnect")}
         </StyledDisconnectButton>
       </StyledModalFooter>
     </ModalBase>

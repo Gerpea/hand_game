@@ -1,4 +1,4 @@
-import { HTMLAttributes, useCallback, useMemo } from "react";
+import { HTMLAttributes, useCallback } from "react";
 import { BiCopy } from "react-icons/bi";
 import {
   ModalBase,
@@ -6,10 +6,10 @@ import {
   StyledModalBody,
   StyledModalTitle,
 } from "./ModalBase";
-import { useGame } from "@/hooks";
 import styled from "styled-components";
 import { copyTextToClipboard } from "@/utils";
 import { toast } from "react-toastify";
+import { useScopedI18n } from "@/locales";
 
 const StyledShareURL = styled.div`
   cursor: pointer;
@@ -34,7 +34,7 @@ const StyledShareIcon = styled(BiCopy)`
 export const OptionsModal: React.FC<Props & HTMLAttributes<HTMLDivElement>> = ({
   ...props
 }) => {
-  const { gameID } = useGame();
+  const t = useScopedI18n("optionsModal");
 
   const shareURL = `${typeof window !== "undefined" && window?.location?.href}`;
 
@@ -49,7 +49,7 @@ export const OptionsModal: React.FC<Props & HTMLAttributes<HTMLDivElement>> = ({
 
   return (
     <ModalBase {...props}>
-      <StyledModalTitle>Share this code with your friend</StyledModalTitle>
+      <StyledModalTitle>{t("title")}</StyledModalTitle>
       <StyledModalBody>
         <StyledShareURL onClick={handleCopyToClipboard}>
           <h3>{shareURL}</h3>

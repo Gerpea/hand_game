@@ -1,3 +1,4 @@
+import { useScopedI18n } from "@/locales";
 import styled from "styled-components";
 
 const StyledContainer = styled.div`
@@ -6,10 +7,11 @@ const StyledContainer = styled.div`
 `;
 
 const MobilePage = () => {
+  const t = useScopedI18n("mobile");
+
   return (
     <StyledContainer>
-      Sorry, but currently we do not support any of mobile or tablet devices, please open
-      this page on desktop
+      {t('notSupported')}
     </StyledContainer>
   );
 };

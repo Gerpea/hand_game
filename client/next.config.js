@@ -17,5 +17,9 @@ module.exports = (phase, { defaultConfig }) => ({
     // Needed for hand_detection package
     config.resolve.fallback = { fs: false }
     return config
+  },
+  i18n: {
+    locales: ['en', 'ru'],
+    defaultLocale: 'ru'
   }
 })
