@@ -25,7 +25,7 @@ const config = (phase, { defaultConfig }) => ({
 
 /** @type {import('next').NextConfig} */
 module.exports = (phase, { defaultConfig }) => {
-  return (phase !== PHASE_TEST && phase !== PHASE_DEVELOPMENT_SERVER) ? withSentryConfig(
+  return (!process.env.CYPRESS && phase !== PHASE_TEST && phase !== PHASE_DEVELOPMENT_SERVER) ? withSentryConfig(
     config,
     {
       silent: true,

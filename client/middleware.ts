@@ -5,7 +5,7 @@ import { UAParser } from 'ua-parser-js';
 export function middleware(req: NextRequest) {
     const ua = new UAParser(req.headers.get('user-agent')!);
     const base = req.nextUrl.origin
-
+    
     if (ua.getDevice().type && req.nextUrl.pathname !== '/mobile') {
         return NextResponse.redirect(new URL('/mobile', base))
     }
@@ -17,5 +17,5 @@ export function middleware(req: NextRequest) {
 }
 
 export const config = {
-    matcher: ['/((?!api|_next/static|_next/image|favicon.ico).*)',],
+    matcher: ['/', '/((?!api|_next/static|_next/image|favicon.ico|monitoring).*)',],
 }

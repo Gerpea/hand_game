@@ -230,3 +230,5 @@ export default function Home() {
     </>
   );
 }
+
+export { getServerSideProps } from "@/utils/getServerSideLocale";
