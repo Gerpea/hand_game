@@ -1,19 +1,15 @@
-import { useScopedI18n } from "@/locales";
 import styled from "styled-components";
+import { useTranslation } from "next-i18next";
 
 const StyledContainer = styled.div`
   text-align: center;
   padding: 2rem;
 `;
 
-const MobilePage = () => {
-  const t = useScopedI18n("mobile");
+export default function MobilePage() {
+  const { t } = useTranslation("common", { keyPrefix: "mobile" });
 
-  return (
-    <StyledContainer>
-      {t('notSupported')}
-    </StyledContainer>
-  );
-};
+  return <StyledContainer>{t("notSupported")}</StyledContainer>;
+}
 
-export default MobilePage;
+export { getServerSideProps } from "@/utils/getServerSideLocale";

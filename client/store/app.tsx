@@ -8,7 +8,7 @@ import { Game } from "@/types";
 import { toast } from "react-toastify";
 import { StateCreator, create } from "zustand";
 import { devtools, persist } from "zustand/middleware";
-import { t } from "@/locales";
+import { i18n } from "next-i18next";
 
 type State = {
   game: Game;
@@ -35,7 +35,7 @@ const initialState: State = {
 
 const state: StateCreator<State & Actions, [], []> = (set, get) => {
   let socket: SocketWithActions | undefined;
-
+  
   const createSocket = (accessToken: string, gameID: string) =>
     createSocketWithHandlers({
       accessToken,
@@ -45,13 +45,13 @@ const state: StateCreator<State & Actions, [], []> = (set, get) => {
       },
       onUserConnected(game, userID) {
         if (userID !== get().userID) {
-          toast(t("toast.userConnected"));
+          toast(i18n?.t("toast.userConnected"));
         }
         set({ game });
       },
       onUserDisconnected(game, userID) {
         if (userID !== get().userID) {
-          toast(t("toast.userDisconnected"));
+          toast(i18n?.t("toast.userDisconnected"));
         }
         set({ game });
       },
@@ -60,13 +60,13 @@ const state: StateCreator<State & Actions, [], []> = (set, get) => {
         if (error.statusCode === 404) {
           set({ game: initialState.game });
           await get().createGame();
-          toast.error(t("toast.error.gameNotFound"));
+          toast.error(i18n?.t("toast.error.gameNotFound"));
           return;
         }
         if (error.statusCode === 401 || error.statusCode === 403) {
           await get().getToken();
-          get().joinGame(get().game.id);
-          toast(t("toast.error.tokenExpired"));
+          await get().createGame();
+          toast(i18n?.t("toast.error.tokenExpired"));
           return;
         }
 

@@ -15,7 +15,6 @@ import {
 export class WsCatchAllFilter implements WsExceptionFilter {
   catch(exception: Error, host: ArgumentsHost) {
     const socket: SocketWithAuth = host.switchToWs().getClient();
-
     if (exception instanceof BadRequestException) {
       const exceptionData = exception.getResponse();
 

@@ -36,7 +36,8 @@ export class GameRepository {
     };
 
     this.logger.log(
-      `Creating new game: ${JSON.stringify(initialGame, null, 2)} with TTL ${this.ttl
+      `Creating new game: ${JSON.stringify(initialGame, null, 2)} with TTL ${
+        this.ttl
       }`,
     );
 

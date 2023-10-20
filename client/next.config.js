@@ -1,7 +1,9 @@
-const { PHASE_DEVELOPMENT_SERVER } = require('next/dist/shared/lib/constants')
+const { PHASE_DEVELOPMENT_SERVER, PHASE_TEST } = require('next/dist/shared/lib/constants')
+const { withSentryConfig } = require("@sentry/nextjs");
+const { i18n } = require('./next-i18next.config')
 
 /** @type {import('next').NextConfig} */
-module.exports = (phase, { defaultConfig }) => ({
+const config = (phase, { defaultConfig }) => ({
   ...defaultConfig,
   reactStrictMode: true,
   compiler: {
@@ -18,44 +20,24 @@ module.exports = (phase, { defaultConfig }) => ({
     config.resolve.fallback = { fs: false }
     return config
   },
-  i18n: {
-    locales: ['en', 'ru'],
-    defaultLocale: 'ru'
-  }
+  i18n,
 })
 
-// Injected content via Sentry wizard below
-
-const { withSentryConfig } = require("@sentry/nextjs");
-
-module.exports = withSentryConfig(
-  module.exports,
-  {
-    // For all available options, see:
-    // https://github.com/getsentry/sentry-webpack-plugin#options
-
-    // Suppresses source map uploading logs during build
-    silent: true,
-    org: "german-cyganov",
-    project: "javascript-nextjs",
-  },
-  {
-    // For all available options, see:
-    // https://docs.sentry.io/platforms/javascript/guides/nextjs/manual-setup/
-
-    // Upload a larger set of source maps for prettier stack traces (increases build time)
-    widenClientFileUpload: true,
-
-    // Transpiles SDK to be compatible with IE11 (increases bundle size)
-    transpileClientSDK: true,
-
-    // Routes browser requests to Sentry through a Next.js rewrite to circumvent ad-blockers (increases server load)
-    tunnelRoute: "/monitoring",
-
-    // Hides source maps from generated client bundles
-    hideSourceMaps: true,
-
-    // Automatically tree-shake Sentry logger statements to reduce bundle size
-    disableLogger: true,
-  }
-);
+/** @type {import('next').NextConfig} */
+module.exports = (phase, { defaultConfig }) => {
+  return (phase !== PHASE_TEST && phase !== PHASE_DEVELOPMENT_SERVER) ? withSentryConfig(
+    config,
+    {
+      silent: true,
+      org: "german-cyganov",
+      project: "javascript-nextjs",
+    },
+    {
+      widenClientFileUpload: true,
+      transpileClientSDK: true,
+      tunnelRoute: "/monitoring",
+      hideSourceMaps: true,
+      disableLogger: true,
+    }
+  )(phase, { defaultConfig }) : config(phase, { defaultConfig })
+}

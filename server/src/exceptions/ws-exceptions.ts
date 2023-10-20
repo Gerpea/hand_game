@@ -16,7 +16,6 @@ export class WsTypeException extends WsException {
       message,
       statusCode,
     };
-
     super(error);
     this.type = type;
   }

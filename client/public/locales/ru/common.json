@@ -1,0 +1,13 @@
+{
+    "optionsModal.title": "Отправьте ссылку своему другу",
+    "optionsModal.copiedToClipboard": "<bold>{{subj}}</bold> скопировано в буфер обмена",
+    "scoreModal.title": "Счет",
+    "scoreModal.you": "Вы",
+    "scoreModal.opponent": "Соперник",
+    "scoreModal.disconnect": "Отключиться",
+    "toast.error.gameNotFound": "Игра не найдена, была создана новая игра",
+    "toast.error.tokenExpired": "Действие токена истекло, создан новый токен и новая игра",
+    "toast.userConnected": "Ваш соперник подключился к игре",
+    "toast.userDisconnected": "Ваш соперник отключился от игры",
+    "mobile.notSupported": "Извините, сейчас мы не поддерживаем мобильные устройства, пожалуйста откройте эту страницу на компьютере"
+}

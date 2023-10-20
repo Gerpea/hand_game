@@ -9,7 +9,7 @@ import {
 import styled from "styled-components";
 import { copyTextToClipboard } from "@/utils";
 import { toast } from "react-toastify";
-import { useScopedI18n } from "@/locales";
+import { Trans, useTranslation } from "next-i18next";
 
 const StyledShareURL = styled.div`
   cursor: pointer;
@@ -34,18 +34,17 @@ const StyledShareIcon = styled(BiCopy)`
 export const OptionsModal: React.FC<Props & HTMLAttributes<HTMLDivElement>> = ({
   ...props
 }) => {
-  const t = useScopedI18n("optionsModal");
-
+  const { t } = useTranslation("common", { keyPrefix: "optionsModal" });
   const shareURL = `${typeof window !== "undefined" && window?.location?.href}`;
 
   const handleCopyToClipboard = useCallback(() => {
     copyTextToClipboard(shareURL);
     toast.success(
-      <span>
-        Copied <b>{shareURL}</b> to clipboard
-      </span>
+      <Trans values={{ subj: shareURL }} components={{ bold: <b /> }}>
+        {t("copiedToClipboard")}
+      </Trans>
     );
-  }, [shareURL]);
+  }, [shareURL, t]);
 
   return (
     <ModalBase {...props}>

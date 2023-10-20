@@ -9,7 +9,7 @@ import {
 import { useGame } from "@/hooks";
 import styled from "styled-components";
 import { useRouter } from "next/router";
-import { useScopedI18n } from "@/locales";
+import { useTranslation } from "next-i18next";
 
 const StyledScores = styled.div`
   display: flex;
@@ -51,7 +51,7 @@ const StyledDisconnectButton = styled.div`
 export const ScoreModal: React.FC<Props & HTMLAttributes<HTMLDivElement>> = ({
   ...props
 }) => {
-  const t = useScopedI18n("scoreModal");
+  const { t } = useTranslation("common", { keyPrefix: "scoreModal" });
 
   const router = useRouter();
   const { users, scores, userID, disconnect } = useGame();
