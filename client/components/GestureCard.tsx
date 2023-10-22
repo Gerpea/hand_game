@@ -2,7 +2,7 @@ import React, { HTMLAttributes } from "react";
 import styled from "styled-components";
 import Card from "./Card";
 import { Gesture } from "@/types";
-import Image from "next/image";
+import GestureImage from "./GestureImage";
 
 const StyledGestureCard = styled(Card)`
   display: flex;
@@ -14,7 +14,7 @@ const StyledGestureCard = styled(Card)`
   position: relative;
 `;
 
-const StyledImage = styled(Image)`
+const StyledGestureImage = styled(GestureImage)`
   padding: 2rem;
 `;
 
@@ -28,12 +28,7 @@ const GestureCard: React.FC<Props & HTMLAttributes<HTMLDivElement>> = ({
 }) => {
   return (
     <StyledGestureCard {...props}>
-      <StyledImage
-        src={gesture.img}
-        alt={gesture.label}
-        layout="fill"
-        objectFit="contain"
-      />
+      <StyledGestureImage gesture={gesture} />
     </StyledGestureCard>
   );
 };
