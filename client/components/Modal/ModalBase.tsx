@@ -3,38 +3,9 @@ import styled, { keyframes } from "styled-components";
 import Card from "../Card";
 import { createPortal } from "react-dom";
 import { BiX } from "react-icons/bi";
+import { zoomIn, zoomOut } from "@/styles/animations";
 
-const appearance = keyframes`
-  0% {
-    transform: scale(0.9);
-    opacity: 0;
-  }
-  50% {
-    transform: scale(1);
-    opacity: 1;
-  }
-  100% {
-    transform: scale(1);
-    opacity: 1;
-  }
-`;
-
-const disappearance = keyframes`
-  0% {
-    transform: scale(1);
-    opacity: 1;
-  }
-  50% {
-    transform: scale(0.9);
-    opacity: 0;
-  }
-  100% {
-    transform: scale(0.9);
-    opacity: 0;
-  }
-`;
-
-const appearanceBack = keyframes`
+const overlayAppear = keyframes`
   0% {
     background-color: rgba(0,0,0,0);
   }
@@ -45,7 +16,8 @@ const appearanceBack = keyframes`
     background-color: rgba(0,0,0,0.8);
   }
 `;
-const disappearanceBack = keyframes`
+
+const overlayDisappear = keyframes`
   0% {
     background-color: rgba(0,0,0,0.8);
   }
@@ -70,7 +42,7 @@ const StyledOverlayContainer = styled.div<{ $isClosing: boolean }>`
 
   z-index: 999;
   animation: ${({ $isClosing }) =>
-      $isClosing ? disappearanceBack : appearanceBack}
+      $isClosing ? overlayDisappear : overlayAppear}
     0.7s ease forwards;
 `;
 
@@ -80,7 +52,7 @@ const StyledModalContainer = styled(Card)<{ $isClosing: boolean }>`
   background-color: var(--card-color);
   box-shadow: none;
 
-  animation: ${({ $isClosing }) => ($isClosing ? disappearance : appearance)}
+  animation: ${({ $isClosing }) => ($isClosing ? zoomOut() : zoomIn(false))}
     0.5s ease forwards;
 
   display: flex;
@@ -115,7 +87,7 @@ export const StyledModalFooter = styled.div`
   justify-content: center;
   justify-self: flex-end;
 
-width: 100%;
+  width: 100%;
 `;
 
 const StyledCloseButton = styled(Card)`
@@ -126,7 +98,7 @@ const StyledCloseButton = styled(Card)`
   right: -1rem;
 
   background-color: var(--card-color);
-  
+
   box-shadow: none;
   cursor: pointer;
 
@@ -138,6 +110,7 @@ const StyledCloseButton = styled(Card)`
     transform: scale(1.1);
   }
 `;
+
 const StyledCloseIcon = styled(BiX)`
   width: 100%;
   height: 100%;
