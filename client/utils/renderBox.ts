@@ -1,7 +1,6 @@
 import { Box } from "hand_recognizer";
 
-export const renderBoxes = (canvas: HTMLCanvasElement, boxes: Box[]) => {
-  const ctx = canvas.getContext("2d")!;
+export const renderBoxes = (ctx: CanvasRenderingContext2D, boxes: Box[]) => {
   // Clean canvas
   ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
 

@@ -31,6 +31,10 @@ body {
 
   font-weight: bold;
   text-transform: uppercase;
+
+  @media (min-width: 1920px) {
+    font-size: 20px;
+  }
 }
 
 :root {

@@ -3,6 +3,7 @@ import { Box } from "hand_recognizer";
 import Card from "./Card";
 import { renderBoxes } from "@/utils";
 import styled from "styled-components";
+import Canvas from "./Canvas";
 
 type Props = {
   imgSrc?: string;
@@ -14,42 +15,37 @@ const StyledHandCard = styled(Card)`
   position: relative;
 `;
 
+const StyledCanvas = styled(Canvas)`
+  position: absolute;
+`;
+
 const HandCard: React.FC<Props & HTMLAttributes<HTMLDivElement>> = ({
   imgSrc,
   boxes,
   ...props
 }) => {
-  const canvasRef = useRef<HTMLCanvasElement>(null);
-  const drawCanvasRef = useRef<HTMLCanvasElement>(null);
-  const canvasCtx = useRef<CanvasRenderingContext2D | null>();
+  const canvasImgCtx = useRef<CanvasRenderingContext2D>(null);
+  const canvasBoxesCtx = useRef<CanvasRenderingContext2D>(null);
 
   useEffect(() => {
-    if (!drawCanvasRef.current || !boxes) {
+    if (!canvasBoxesCtx.current || !boxes) {
       return;
     }
 
-    renderBoxes(drawCanvasRef.current!, boxes);
+    renderBoxes(canvasBoxesCtx.current, boxes);
   }, [boxes]);
 
   useEffect(() => {
-    if (!canvasRef.current) {
-      return;
-    }
-
-    canvasCtx.current = canvasRef.current.getContext("2d");
-  }, []);
-
-  useEffect(() => {
-    if (!canvasCtx.current) {
+    if (!canvasImgCtx.current) {
       return;
     }
 
     if (!imgSrc) {
-      canvasCtx.current.clearRect(
+      canvasImgCtx.current.clearRect(
         0,
         0,
-        canvasRef.current?.width || 0,
-        canvasRef.current?.height || 0
+        canvasImgCtx.current.canvas.width || 0,
+        canvasImgCtx.current.canvas.height || 0
       );
       return;
     }
@@ -57,32 +53,20 @@ const HandCard: React.FC<Props & HTMLAttributes<HTMLDivElement>> = ({
     const img = new Image();
     img.src = imgSrc;
     img.onload = () => {
-      canvasCtx.current!.drawImage(
+      canvasImgCtx.current!.drawImage(
         img,
         0,
         0,
-        canvasRef.current?.width || 0,
-        canvasRef.current?.height || 0
+        canvasImgCtx.current!.canvas.width || 0,
+        canvasImgCtx.current!.canvas.height || 0
       );
     };
   }, [imgSrc]);
 
   return (
     <StyledHandCard {...props}>
-      <canvas
-        ref={canvasRef}
-        width="416"
-        height="416"
-        style={{ position: "absolute" }}
-      />
-      {boxes && (
-        <canvas
-          ref={drawCanvasRef}
-          width="416"
-          height="416"
-          style={{ position: "absolute" }}
-        />
-      )}
+      <StyledCanvas ctx={canvasImgCtx} />
+      {boxes && <StyledCanvas ctx={canvasBoxesCtx} />}
     </StyledHandCard>
   );
 };

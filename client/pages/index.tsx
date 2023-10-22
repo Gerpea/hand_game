@@ -46,9 +46,15 @@ const StyledContainer = styled.div`
 `;
 
 const StyledGestureCard = styled(GestureCard)`
+  width: 25vw;
+  height: 25vw;
+
   animation: ${appearance} 0.5s ease;
 `;
 const StyledHandCard = styled(HandCard)`
+  width: 25vw;
+  height: 25vw;
+  
   animation: ${appearance} 0.5s ease;
 `;
 
