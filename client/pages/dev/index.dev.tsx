@@ -13,7 +13,7 @@ import { useGesture } from "@/hooks/useGesture";
 
 const StyledContainer = styled.div`
   display: flex;
-  column-gap: 16px;
+  column-gap: 1rem;
 `;
 
 let timeoutId: NodeJS.Timeout;

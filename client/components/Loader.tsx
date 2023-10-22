@@ -61,24 +61,28 @@ const StyledLoader = styled.div`
   width: 3rem;
   height: 3rem;
   position: relative;
+
   animation: ${rotate} 4s ease infinite;
 
   &:after {
-    position: absolute;
     content: "";
     width: 100%;
     height: 100%;
-    background-color: #fe8033;
-    border-radius: 0.5rem;
+    position: absolute;
+
+    background-color: var(--card-color);
+    border-radius: var(--card-border-radius);
   }
 
   &:before {
-    position: absolute;
     content: "";
     width: 100%;
     height: 100%;
-    background-color: #fe8033;
-    border-radius: 0.5rem;
+    position: absolute;
+
+    background-color: var(--card-color);
+    border-radius: var(--card-border-radius);
+
     animation: ${popout} 4s ease infinite;
   }
 `;

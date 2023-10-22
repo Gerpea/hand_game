@@ -11,19 +11,22 @@ const StyledContainer = styled.div`
 `;
 
 const StyledMyScore = styled.span`
-  color: green;
+  color: var(--score-color);
 `;
 
 const StyledSlash = styled.span`
+  width: 0.1875rem;
+  height: 100%;
+  min-height: 100%;
+
   position: absolute;
   left: 0;
   right: 0;
+
   margin: auto;
-  width: 3px;
-  box-shadow: 0px 0px 8px 2px rgba(34, 60, 80, 0.25);
-  background-color: #00020a;
-  height: 100%;
-  min-height: 100%;
+
+  box-shadow: var(--box-shadow);
+  background-color: var(--color);
 `;
 
 const StyledOpponentScore = styled.span`

@@ -4,11 +4,11 @@ import Card from "./Card";
 import { Gesture } from "@/types";
 
 const StyledGestureCard = styled(Card)`
-  background-color: #fe8033;
-
   display: flex;
   align-items: center;
   justify-content: center;
+  
+  background-color: var(--card-color);
 `;
 
 type Props = {

@@ -77,7 +77,7 @@ const StyledOverlayContainer = styled.div<{ $isClosing: boolean }>`
 const StyledModalContainer = styled(Card)<{ $isClosing: boolean }>`
   width: 30%;
   height: auto;
-  background-color: #fe8033;
+  background-color: var(--card-color);
   box-shadow: none;
 
   animation: ${({ $isClosing }) => ($isClosing ? disappearance : appearance)}
@@ -87,6 +87,7 @@ const StyledModalContainer = styled(Card)<{ $isClosing: boolean }>`
   flex-direction: column;
   justify-content: center;
   align-items: center;
+
   position: relative;
   overflow: visible;
   padding: 1rem;
@@ -97,10 +98,11 @@ export const StyledModalBody = styled.div`
   flex-direction: column;
   align-items: center;
   justify-content: center;
+
+  width: 100%;
   margin-top: auto;
   margin-bottom: auto;
   padding-bottom: 1.5rem;
-  width: 100%;
 `;
 
 export const StyledModalTitle = styled.h2`
@@ -112,16 +114,19 @@ export const StyledModalFooter = styled.div`
   align-items: center;
   justify-content: center;
   justify-self: flex-end;
-  width: 100%;
+
+width: 100%;
 `;
 
 const StyledCloseButton = styled(Card)`
   width: 2rem;
   height: 2rem;
+  position: absolute;
   top: -1rem;
   right: -1rem;
-  background-color: #fe8033;
-  position: absolute;
+
+  background-color: var(--card-color);
+  
   box-shadow: none;
   cursor: pointer;
 

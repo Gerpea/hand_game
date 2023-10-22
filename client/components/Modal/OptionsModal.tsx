@@ -12,10 +12,10 @@ import { toast } from "react-toastify";
 import { Trans, useTranslation } from "next-i18next";
 
 const StyledShareURL = styled.div`
-  cursor: pointer;
   display: flex;
   align-items: center;
   column-gap: 0.25rem;
+  cursor: pointer;
 
   * {
     padding: 0;
@@ -26,6 +26,7 @@ const StyledShareURL = styled.div`
     opacity: 0.5;
   }
 `;
+
 const StyledShareIcon = styled(BiCopy)`
   width: 1.5rem;
   height: 1.5rem;

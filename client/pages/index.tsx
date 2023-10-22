@@ -34,7 +34,7 @@ const appearance = keyframes`
     opacity: 1;
   }
   100% {
-    box-shadow: 0px 0px 8px 2px rgba(34, 60, 80, 0.25);
+    box-shadow: var(--box-shadow);
     transform: scale(1) translateX(0%);
     opacity: 1;
   }
@@ -53,14 +53,15 @@ const StyledHandCard = styled(HandCard)`
 `;
 
 const StyledOptionsButton = styled(Card)`
+  width: fit-content;
+  min-width: 3rem;
+  height: 3rem;
+
   display: flex;
   align-items: center;
   justify-content: center;
 
-  width: fit-content;
-  min-width: 3rem;
-  height: 3rem;
-  background-color: #fe8033;
+  background-color: var(--card-color);
 
   border-top-right-radius: 0;
   border-top-left-radius: 0;
@@ -69,6 +70,7 @@ const StyledOptionsButton = styled(Card)`
   top: 0;
   left: 0;
   right: 0;
+  
   margin-left: auto;
   margin-right: auto;
 
@@ -97,10 +99,12 @@ const StyledToastContainer = styled(ToastContainer).attrs({
   color: inherit;
 
   .toast {
-    background-color: rgba(254, 128, 51, 0.6);
+    border-radius: var(--card-border-radius);
+
+    background-color: var(--toast-color);
     color: inherit;
+
     font: inherit;
-    border-radius: 8px;
   }
 `;
 

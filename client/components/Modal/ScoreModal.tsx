@@ -36,10 +36,10 @@ const StyledDisconnectButton = styled.div`
   align-items: center;
   justify-content: center;
 
-  border-bottom-left-radius: 0.5rem;
-  border-bottom-right-radius: 0.5rem;
+  border-bottom-left-radius: var(--card-border-radius);
+  border-bottom-right-radius: var(--card-border-radius);
 
-  box-shadow: 0px 0px 8px 2px rgba(34, 60, 80, 0.25) inset;
+  box-shadow: var(--box-shadow) inset;
 
   cursor: pointer;
   transition: all 0.15s linear;
