@@ -1,5 +1,4 @@
 import { useGame } from "@/hooks";
-import { useMemo } from "react";
 import styled from "styled-components";
 
 const StyledContainer = styled.div`
@@ -29,21 +28,10 @@ const StyledSlash = styled.span`
   background-color: var(--color);
 `;
 
-const StyledOpponentScore = styled.span`
-`;
+const StyledOpponentScore = styled.span``;
 
 const Score = () => {
-  const { users, scores, userID } = useGame();
-  const myScore = useMemo(() => scores[userID] || 0, [scores, userID]);
-  const opponentScore = useMemo(
-    () =>
-      scores[
-        Object.entries(users).filter(
-          ([id, active]) => id !== userID && active
-        )[0][0]
-      ] || 0,
-    [scores, userID, users]
-  );
+  const { scores, userID, opponentScore, myScore } = useGame();
 
   return (
     <StyledContainer>

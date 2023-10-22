@@ -54,17 +54,7 @@ export const ScoreModal: React.FC<Props & HTMLAttributes<HTMLDivElement>> = ({
   const { t } = useTranslation("common", { keyPrefix: "scoreModal" });
 
   const router = useRouter();
-  const { users, scores, userID, disconnect } = useGame();
-  const myScore = useMemo(() => scores[userID] || 0, [scores, userID]);
-  const opponentScore = useMemo(
-    () =>
-      scores[
-        Object.entries(users).filter(
-          ([id, active]) => id !== userID && active
-        )[0][0]
-      ] || 0,
-    [scores, userID, users]
-  );
+  const { disconnect, opponentScore, myScore } = useGame();
 
   const handleDisconnect = useCallback(async () => {
     disconnect();

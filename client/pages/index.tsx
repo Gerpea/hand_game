@@ -2,7 +2,7 @@ import styled from "styled-components";
 import GestureCard from "@/components/GestureCard";
 import HandCard from "@/components/HandCard";
 import { useGame } from "@/hooks";
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import { HiPlay } from "react-icons/hi2";
 import Loader from "@/components/Loader";
 import Card from "@/components/Card";
@@ -57,7 +57,7 @@ const StyledOptionsButton = styled(Card)`
 
   cursor: pointer;
 
-  transition: all 0.33s ease;
+  transition: width .33s ease;
 
   &:hover {
     transform: scale(1.1);
@@ -90,7 +90,7 @@ const StyledToastContainer = styled(ToastContainer).attrs({
 `;
 
 export default function Home() {
-  const { gameID, users } = useGame();
+  const { gameID, opponentID } = useGame();
   const { isLoading, gesture, cameraImgSrc, boxes } = useGameLogic(1000);
   useGameRedirects(gameID);
 
@@ -110,22 +110,15 @@ export default function Home() {
         ) : (
           <>
             <StyledOptionsButton onClick={handleOpenModal}>
-              {Object.values(users).filter((active) => active).length > 1 ? (
-                <Score />
-              ) : (
-                <StyledOptionsIcon />
-              )}
+              {opponentID ? <Score /> : <StyledOptionsIcon />}
             </StyledOptionsButton>
             <StyledGestureCard gesture={gesture} />
             <StyledHandCard imgSrc={cameraImgSrc} boxes={boxes} />
           </>
         )}
       </StyledContainer>
-      {Object.values(users).filter((active) => active).length > 1 ? (
-        <ScoreModal isOpen={isOpen} onClose={handleCloseModal} />
-      ) : (
-        <OptionsModal isOpen={isOpen} onClose={handleCloseModal} />
-      )}
+      <ScoreModal isOpen={isOpen && !!opponentID} onClose={handleCloseModal} />
+      <OptionsModal isOpen={isOpen && !!!opponentID} onClose={handleCloseModal} />
       <StyledToastContainer
         position="bottom-center"
         autoClose={3000}
