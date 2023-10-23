@@ -2,7 +2,9 @@ import { Game } from "@/types";
 import { io } from "socket.io-client";
 import { APIError, SocketWithActions } from "./types";
 
-export const socketIOUrl = `http://${process.env.NEXT_PUBLIC_API_HOST}:${process.env.NEXT_PUBLIC_API_PORT}/${process.env.NEXT_PUBLIC_WS_GAME_NAMESPACE}`
+export const socketIOUrl = process.env.NODE_ENV === 'production' ?
+    `https://${process.env.NEXT_PUBLIC_API_HOST}/${process.env.NEXT_PUBLIC_WS_GAME_NAMESPACE}` :
+    `http://${process.env.NEXT_PUBLIC_API_HOST}:${process.env.NEXT_PUBLIC_API_PORT}/${process.env.NEXT_PUBLIC_WS_GAME_NAMESPACE}`;
 
 type CreateSocketOptions = {
     accessToken: string;

@@ -1,6 +1,8 @@
 import { APIError, CreateGameResponse, JoinGameResponse } from "./types";
 
-const baseApiUrl = `http://${process.env.NEXT_PUBLIC_API_HOST}:${process.env.NEXT_PUBLIC_API_PORT}${process.env.NEXT_PUBLIC_API_ENDPOINT}`;
+const baseApiUrl = process.env.NODE_ENV === 'production' ?
+    `https://${process.env.NEXT_PUBLIC_API_HOST}${process.env.NEXT_PUBLIC_API_ENDPOINT}` :
+    `http://${process.env.NEXT_PUBLIC_API_HOST}:${process.env.NEXT_PUBLIC_API_PORT}${process.env.NEXT_PUBLIC_API_ENDPOINT}`;
 
 type MakeRequestResponse<T> = {
     data: T | Record<string, never>;

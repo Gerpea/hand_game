@@ -8,8 +8,6 @@ services:
       - 'redisdata:/data'
     ports:
       - 6379:6379
-    expose:
-      - 6379
   app:
     container_name: app
     build: ./
@@ -19,8 +17,8 @@ services:
     depends_on:
       - redis
     ports:
-      - 3000:3000
-      - 8080:8080
+      - 3000
+      - 8080
   nginx:
     container_name: nginx
     build: ./nginx

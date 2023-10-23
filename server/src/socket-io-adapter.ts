@@ -1,9 +1,4 @@
-import {
-  INestApplicationContext,
-  Logger,
-  UnauthorizedException,
-} from '@nestjs/common';
-import { ConfigService } from '@nestjs/config';
+import { INestApplicationContext, Logger } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { IoAdapter } from '@nestjs/platform-socket.io';
 import { Server, ServerOptions } from 'socket.io';
@@ -12,30 +7,13 @@ import { WsUnathorizedException } from './exceptions/ws-exceptions';
 
 export class SocketIOAdapter extends IoAdapter {
   private readonly logger = new Logger(SocketIOAdapter.name);
-  constructor(
-    private app: INestApplicationContext,
-    private configServer: ConfigService,
-  ) {
+  constructor(private app: INestApplicationContext) {
     super(app);
   }
 
   createIOServer(port: number, options?: ServerOptions) {
-    const clientPort = parseInt(this.configServer.get('CLIENT_PORT'));
-
-    const cors = {
-      origin: [
-        `http://localhost:${clientPort}`,
-        new RegExp(`/^http:\/\/192\.168\.1\.([1-9]|[1-9]\d):${clientPort}/`),
-      ],
-    };
-
-    this.logger.log('Configuring SocketIO server with custom CORS options', {
-      cors,
-    });
-
     const optionsWithCors: ServerOptions = {
       ...options,
-      cors,
     };
 
     const jwtService = this.app.get(JwtService);
@@ -49,21 +27,21 @@ export class SocketIOAdapter extends IoAdapter {
 
 const createTokenMiddleware =
   (jwtService: JwtService, logger: Logger) =>
-  (socket: SocketWithAuth, next) => {
-    const token =
-      socket.handshake.auth.token || socket.handshake.headers['token'];
-    const gameID =
-      socket.handshake.auth.gameID || socket.handshake.headers['gameID'];
+    (socket: SocketWithAuth, next) => {
+      const token =
+        socket.handshake.auth.token || socket.handshake.headers['token'];
+      const gameID =
+        socket.handshake.auth.gameID || socket.handshake.headers['gameID'];
 
-    logger.debug(`Validating auth token before connection: ${token}`);
+      logger.debug(`Validating auth token before connection: ${token}`);
 
-    try {
-      const payload = jwtService.verify(token);
-      socket.userID = payload.sub;
-      socket.gameID = gameID;
-      next();
-    } catch {
-      socket.emit('exception', new WsUnathorizedException('Token expired'));
-      next();
-    }
-  };
+      try {
+        const payload = jwtService.verify(token);
+        socket.userID = payload.sub;
+        socket.gameID = gameID;
+        next();
+      } catch {
+        socket.emit('exception', new WsUnathorizedException('Token expired'));
+        next();
+      }
+    };
