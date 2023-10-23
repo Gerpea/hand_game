@@ -23,10 +23,6 @@ export const useGame = () => {
   );
   const myScore = useMemo(() => scores[userID] || 0, [scores, userID]);
 
-  useEffect(() => {
-    console.log(opponentID, opponentScore);
-  }, [opponentID, opponentScore]);
-
   return {
     userID,
     gameID,

@@ -1,4 +1,10 @@
-import React, { HTMLAttributes, useEffect, useRef, useState } from "react";
+import React, {
+  HTMLAttributes,
+  useCallback,
+  useEffect,
+  useRef,
+  useState,
+} from "react";
 import Image from "next/image";
 import { Gesture } from "@/types";
 import styled, { css } from "styled-components";
@@ -25,51 +31,30 @@ const GestureImage: React.FC<Props & HTMLAttributes<HTMLImageElement>> = ({
   gesture,
   className,
 }) => {
-  const [firstGesture, setFirstGesture] = useState<Gesture>(gesture);
-  const [secondGesture, setSecondGesture] = useState<Gesture>(gesture);
-  const isShowFisrt = useRef(true);
-  const isShowSecond = useRef(false);
-  const firstEnd = useRef(true);
-  const secondEnd = useRef(false);
+  const [showedGesture, setShowedGesture] = useState<Gesture>(gesture);
+  const [showGesture, setShowGesture] = useState<boolean>(false);
 
   useEffect(() => {
-    if (isShowFisrt.current) {
-      setSecondGesture(gesture);
-      isShowSecond.current = true;
-      secondEnd.current = false;
-      isShowFisrt.current = false;
-      return;
-    }
-    if (isShowSecond.current) {
-      setFirstGesture(gesture);
-      isShowSecond.current = false;
-      firstEnd.current = false;
-      isShowFisrt.current = true;
-      return;
-    }
+    setShowGesture(false);
   }, [gesture]);
 
+  const handleAnimationEnd = useCallback(() => {
+    if (!showGesture) {
+      setShowedGesture(gesture);
+      setShowGesture(true);
+    }
+  }, [showGesture, gesture]);
+
   return (
-    <>
-      <StyledImage
-        src={firstGesture.img}
-        alt={firstGesture.label}
-        layout="fill"
-        objectFit="contain"
-        $isShow={secondEnd.current && isShowFisrt.current}
-        onAnimationEnd={() => (firstEnd.current = true)}
-        className={className}
-      />
-      <StyledImage
-        src={secondGesture.img}
-        alt={secondGesture.label}
-        layout="fill"
-        objectFit="contain"
-        $isShow={firstEnd.current && isShowSecond.current}
-        onAnimationEnd={() => (secondEnd.current = true)}
-        className={className}
-      />
-    </>
+    <StyledImage
+      src={showedGesture.img}
+      alt={showedGesture.label}
+      layout="fill"
+      objectFit="contain"
+      $isShow={showGesture}
+      onAnimationEnd={handleAnimationEnd}
+      className={className}
+    />
   );
 };
 

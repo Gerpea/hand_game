@@ -5,59 +5,59 @@ import {
 } from "hand_recognizer";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { useApi, useCameraImage, useGesture } from ".";
+import { Gesture } from "@/types";
 
 export const useGameLogic = (tickTime: number) => {
-  const timerId = useRef<NodeJS.Timeout>();
   const cameraImgSrc = useCameraImage();
   const [boxes, setBoxes] = useState<Box[]>([]);
-
   const { gesture, nextGesture } = useGesture();
-
+  const { addScore } = useApi();
   const { detect, inited: handPositionInited } = useHandPosition();
   const { classify, inited: gestureClassificationInited } =
     useGestureClassification();
-
-  const { addScore } = useApi();
 
   const isLoading = useMemo(
     () => !handPositionInited || !gestureClassificationInited,
     [handPositionInited, gestureClassificationInited]
   );
 
+  const cameraImgSrcRef = useRef<string>();
+  const gestureRef = useRef<Gesture>();
+
   useEffect(() => {
-    if (!cameraImgSrc || timerId.current || isLoading) {
+    cameraImgSrcRef.current = cameraImgSrc;
+  }, [cameraImgSrc]);
+
+  useEffect(() => {
+    gestureRef.current = gesture;
+  }, [gesture]);
+
+  useEffect(() => {
+    if (isLoading) {
       return;
     }
 
-    timerId.current = setTimeout(async () => {
-      timerId.current = undefined;
-      const boxes = await detect(cameraImgSrc);
+    setInterval(async () => {
+      if (!cameraImgSrcRef.current || !gestureRef.current) {
+        return;
+      }
+
+      const boxes = await detect(cameraImgSrcRef.current);
       setBoxes(boxes);
       const box = boxes[0];
       if (!box) {
         return;
       }
-
-      const classes = await classify(cameraImgSrc, box);
+      const classes = await classify(cameraImgSrcRef.current, box);
       const topClass = classes.sort((a, b) =>
         a.probability < b.probability ? 1 : -1
       )[0];
-
-      if (topClass.probability > 0.9 && topClass.id === gesture.id) {
+      if (topClass.probability > 0.9 && topClass.id === gestureRef.current.id) {
         addScore();
         nextGesture();
       }
     }, tickTime);
-  }, [
-    cameraImgSrc,
-    isLoading,
-    addScore,
-    classify,
-    detect,
-    gesture.id,
-    nextGesture,
-    tickTime,
-  ]);
+  }, [isLoading, tickTime, addScore, detect, classify, nextGesture]);
 
   return {
     gesture,
