@@ -1,9 +1,10 @@
-import React, { HTMLAttributes, useEffect, useRef } from "react";
+import React, { HTMLAttributes, useEffect, useRef, useState } from "react";
 import { Box } from "hand_recognizer";
 import Card from "./Card";
 import { renderBoxes } from "@/utils";
 import styled from "styled-components";
 import Canvas from "./Canvas";
+import { CAMERA_HEIGHT, CAMERA_WIDTH } from "@/const";
 
 type Props = {
   imgSrc?: string;
@@ -32,7 +33,9 @@ const HandCard: React.FC<Props & HTMLAttributes<HTMLDivElement>> = ({
       return;
     }
 
-    renderBoxes(canvasBoxesCtx.current, boxes);
+    const xRatio = canvasBoxesCtx.current.canvas.width / CAMERA_WIDTH;
+    const yRatio = canvasBoxesCtx.current.canvas.height / CAMERA_HEIGHT;
+    renderBoxes(canvasBoxesCtx.current, boxes, xRatio, yRatio);
   }, [boxes]);
 
   useEffect(() => {
