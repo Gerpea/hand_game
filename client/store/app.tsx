@@ -56,7 +56,6 @@ const state: StateCreator<State & Actions, [], []> = (set, get) => {
         set({ game });
       },
       async onError(error) {
-        toast.error(error.message);
         if (error.statusCode === 404) {
           set({ game: initialState.game });
           await get().createGame();
@@ -69,8 +68,13 @@ const state: StateCreator<State & Actions, [], []> = (set, get) => {
           toast(i18n?.t("toast.error.tokenExpired"));
           return;
         }
+        if (error.statusCode === 406) {
+          await get().createGame();
+          toast(i18n?.t("toast.error.roomIsFull"));
+          return;
+        }
 
-        toast.error(error.message);
+        toast.error("toast.error.unknown");
       },
     });
 
@@ -115,7 +119,7 @@ const state: StateCreator<State & Actions, [], []> = (set, get) => {
           await get().getToken();
           return get().createGame();
         } else {
-          toast.error(error.message);
+          toast.error("toast.error.tokenExpired");
         }
         return;
       }

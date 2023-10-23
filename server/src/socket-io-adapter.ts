@@ -27,21 +27,21 @@ export class SocketIOAdapter extends IoAdapter {
 
 const createTokenMiddleware =
   (jwtService: JwtService, logger: Logger) =>
-    (socket: SocketWithAuth, next) => {
-      const token =
-        socket.handshake.auth.token || socket.handshake.headers['token'];
-      const gameID =
-        socket.handshake.auth.gameID || socket.handshake.headers['gameID'];
+  (socket: SocketWithAuth, next) => {
+    const token =
+      socket.handshake.auth.token || socket.handshake.headers['token'];
+    const gameID =
+      socket.handshake.auth.gameID || socket.handshake.headers['gameID'];
 
-      logger.debug(`Validating auth token before connection: ${token}`);
+    logger.debug(`Validating auth token before connection: ${token}`);
 
-      try {
-        const payload = jwtService.verify(token);
-        socket.userID = payload.sub;
-        socket.gameID = gameID;
-        next();
-      } catch {
-        socket.emit('exception', new WsUnathorizedException('Token expired'));
-        next();
-      }
-    };
+    try {
+      const payload = jwtService.verify(token);
+      socket.userID = payload.sub;
+      socket.gameID = gameID;
+      next();
+    } catch {
+      socket.emit('exception', new WsUnathorizedException('Token expired'));
+      next();
+    }
+  };

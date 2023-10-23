@@ -7,6 +7,8 @@
     "scoreModal.disconnect": "Disconnect",
     "toast.error.gameNotFound": "Game not found, new game was created instead",
     "toast.error.tokenExpired": "Access token just expired, creating new token and new game",
+    "toast.error.roomIsFull": "Game is full, new game was created",
+    "toast.error.unknown": "Unknown error",
     "toast.userConnected": "Your opponent enter the gmae",
     "toast.userDisconnected": "Your opponent leave the game",
     "mobile.notSupported": "Sorry, but currently we do not support any of mobile devices, please open this page on desktop"

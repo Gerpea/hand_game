@@ -11,7 +11,7 @@ async function bootstrap() {
   const configService = app.get(ConfigService);
 
   app.enableCors();
-  app.useWebSocketAdapter(new SocketIOAdapter(app, configService));
+  app.useWebSocketAdapter(new SocketIOAdapter(app));
 
   const port = parseInt(configService.get('PORT'));
   await app.listen(port);

@@ -1,4 +1,10 @@
-import { Logger, UseFilters, UsePipes, ValidationPipe } from '@nestjs/common';
+import {
+  Logger,
+  NotAcceptableException,
+  UseFilters,
+  UsePipes,
+  ValidationPipe,
+} from '@nestjs/common';
 import {
   OnGatewayInit,
   WebSocketGateway,
@@ -35,11 +41,20 @@ export class GameGateway
     const { gameID, userID } = client;
 
     const roomName = gameID;
-    await client.join(roomName);
-
-    const connectedClients = this.io.adapter.rooms.get(roomName)?.size ?? 0;
 
     this.logger.debug(`Number of connected sockets: ${sockets.size}`);
+    const connectedClients = this.io.adapter.rooms.get(roomName)?.size ?? 0;
+    if (connectedClients > 1) {
+      client.emit(
+        'exception',
+        new NotAcceptableException('Room is full already'),
+      );
+      this.logger.debug(`Exception room is full`);
+      return;
+    }
+
+    await client.join(roomName);
+
     this.logger.debug(
       `Socket connected with userID: ${userID}, gameID: ${gameID}"`,
     );
@@ -58,36 +73,28 @@ export class GameGateway
 
       this.io.to(roomName).emit('user_connected', updatedGame, userID);
     } catch (e) {
-      this.io.to(roomName).emit('exception', e);
+      client.emit('exception', e);
     }
+
+    client.on('disconnect', async () => {
+      try {
+        const updatedGame = await this.gameServcie.removeUser({
+          gameID,
+          userID,
+        });
+
+        if (updatedGame) {
+          this.io.to(roomName).emit('user_disconnected', updatedGame, userID);
+        }
+      } catch (e) {
+        client.emit('exception', e);
+      }
+    });
   }
 
-  async handleDisconnect(client: SocketWithAuth) {
+  async handleDisconnect() {
     const sockets = this.io.sockets;
-
-    const { gameID, userID } = client;
-    const roomName = gameID;
-    const clientCount = this.io.adapter.rooms?.get(roomName)?.size ?? 0;
-
     this.logger.debug(`Number of connected sockets: ${sockets.size}`);
-    this.logger.log(`Disconnected socket id: ${client.id}`);
-    this.logger.debug(`Number of connected sockets: ${sockets.size}`);
-    this.logger.debug(
-      `Total clients connected to room '${roomName}': ${clientCount}`,
-    );
-
-    try {
-      const updatedGame = await this.gameServcie.removeUser({
-        gameID,
-        userID,
-      });
-
-      if (updatedGame) {
-        this.io.to(gameID).emit('user_disconnected', updatedGame, userID);
-      }
-    } catch (e) {
-      this.io.to(roomName).emit('exception', e);
-    }
   }
 
   @SubscribeMessage('add_score')
