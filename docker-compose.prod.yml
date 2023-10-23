@@ -1,0 +1,33 @@
+version: '3'
+services:
+  redis:
+    container_name: redis
+    image: 'redislabs/rejson:2.0.0'
+    restart: always
+    volumes:
+      - 'redisdata:/data'
+    ports:
+      - 6379:6379
+    expose:
+      - 6379
+  app:
+    container_name: app
+    build: ./
+    restart: always
+    environment:
+      - NODE_ENV=production
+    depends_on:
+      - redis
+    ports:
+      - 3000:3000
+      - 8080:8080
+  nginx:
+    container_name: nginx
+    build: ./nginx
+    depends_on:
+      - app
+    ports:
+      - 80:80
+
+volumes:
+  redisdata:

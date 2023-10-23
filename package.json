@@ -10,10 +10,17 @@
   ],
   "scripts": {
     "start": "concurrently 'npm:server:dev' 'npm:client:dev'",
+    "client:build": "npm run build --workspace=client",
+    "client:start": "npm run start --workspace=client",
     "client:dev": "npm run dev --workspace=client",
+    "client:link": "npm link hand_recognizer --workspace=client",
+    "server:build": "npm run build --workspace=server",
+    "server:start": "npm run start:prod --workspace=server",
     "server:dev": "concurrently 'npm:redis:start' && wait-on tcp:6379 && npm run start:dev --workspace=server",
     "redis:start": "docker-compose up -d",
-    "redis:stop": "docker-compose down"
+    "redis:stop": "docker-compose down",
+    "packages:build": "npm run build --workspace=packages",
+    "packages:link": "npm link --workspace=packages"
   },
   "repository": {
     "type": "git",
