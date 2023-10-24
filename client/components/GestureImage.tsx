@@ -41,14 +41,18 @@ const GestureImage: React.FC<Props & HTMLAttributes<HTMLImageElement>> = ({
   const handleAnimationEnd = useCallback(() => {
     if (!showGesture) {
       setShowedGesture(gesture);
-      setShowGesture(true);
     }
   }, [showGesture, gesture]);
 
+  const handleImageLoad = useCallback(() => {
+    setShowGesture(true);
+  }, [])
+  
   return (
     <StyledImage
       src={showedGesture.img}
       alt={showedGesture.label}
+      onLoad={handleImageLoad}
       layout="fill"
       objectFit="contain"
       $isShow={showGesture}
