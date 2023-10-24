@@ -6,7 +6,7 @@
     "scoreModal.opponent": "Соперник",
     "scoreModal.disconnect": "Отключиться",
     "toast.error.gameNotFound": "Игра не найдена, была создана новая игра",
-    "toast.error.tokenExpired": "Действие токена истекло, создан новый токен и новая игра",
+    "toast.error.tokenExpired": "Действие токена истекло, создан новый",
     "toast.error.roomIsFull": "Нет места в игре, была создана новая игра",
     "toast.error.unknown": "Неизвестная ошибка",
     "toast.userConnected": "Ваш соперник подключился к игре",

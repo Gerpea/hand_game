@@ -35,7 +35,7 @@ const initialState: State = {
 
 const state: StateCreator<State & Actions, [], []> = (set, get) => {
   let socket: SocketWithActions | undefined;
-  
+
   const createSocket = (accessToken: string, gameID: string) =>
     createSocketWithHandlers({
       accessToken,
@@ -56,16 +56,15 @@ const state: StateCreator<State & Actions, [], []> = (set, get) => {
         set({ game });
       },
       async onError(error) {
+        if (error.statusCode === 401 || error.statusCode === 403) {
+          await get().getToken();
+          get().joinGame(gameID);
+          return;
+        }
         if (error.statusCode === 404) {
           set({ game: initialState.game });
           await get().createGame();
           toast.error(i18n?.t("toast.error.gameNotFound"));
-          return;
-        }
-        if (error.statusCode === 401 || error.statusCode === 403) {
-          await get().getToken();
-          await get().createGame();
-          toast(i18n?.t("toast.error.tokenExpired"));
           return;
         }
         if (error.statusCode === 406) {
@@ -73,7 +72,6 @@ const state: StateCreator<State & Actions, [], []> = (set, get) => {
           toast(i18n?.t("toast.error.roomIsFull"));
           return;
         }
-
         toast.error("toast.error.unknown");
       },
     });
@@ -90,7 +88,7 @@ const state: StateCreator<State & Actions, [], []> = (set, get) => {
     async getToken() {
       const { data, error } = await getToken();
       if (error) {
-        toast.error(error.message);
+        toast.error("toast.error.unknown");
         return;
       }
 
@@ -118,8 +116,6 @@ const state: StateCreator<State & Actions, [], []> = (set, get) => {
         if (error.statusCode === 403) {
           await get().getToken();
           return get().createGame();
-        } else {
-          toast.error("toast.error.tokenExpired");
         }
         return;
       }

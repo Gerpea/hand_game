@@ -40,6 +40,10 @@ export class GameGateway
     const sockets = this.io.sockets;
     const { gameID, userID } = client;
 
+    if (!gameID || !userID) {
+      return;
+    }
+
     const roomName = gameID;
 
     this.logger.debug(`Number of connected sockets: ${sockets.size}`);

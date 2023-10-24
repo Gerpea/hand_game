@@ -6,7 +6,7 @@
     "scoreModal.opponent": "Opponent",
     "scoreModal.disconnect": "Disconnect",
     "toast.error.gameNotFound": "Game not found, new game was created instead",
-    "toast.error.tokenExpired": "Access token just expired, creating new token and new game",
+    "toast.error.tokenExpired": "Access token just expired, new was created",
     "toast.error.roomIsFull": "Game is full, new game was created",
     "toast.error.unknown": "Unknown error",
     "toast.userConnected": "Your opponent enter the gmae",
