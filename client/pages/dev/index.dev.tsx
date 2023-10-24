@@ -12,6 +12,15 @@ const StyledContainer = styled.div`
   column-gap: 1rem;
 `;
 
+const StyledGestureCard = styled(GestureCard)`
+  width: 25vw;
+  height: 25vw;
+`;
+const StyledHandCard = styled(HandCard)`
+  width: 25vw;
+  height: 25vw;
+`;
+
 let timeoutId: NodeJS.Timeout;
 
 type Sample = {
@@ -112,8 +121,8 @@ export default function DevHome() {
       <p>Then press the spacebar and wait a 3 seconds</p>
       <p>Repeat</p>
       <StyledContainer>
-        <GestureCard gesture={gesture} />
-        <HandCard imgSrc={cameraImage} boxes={boxes} />
+        <StyledGestureCard gesture={gesture} />
+        <StyledHandCard imgSrc={cameraImage} boxes={boxes} />
       </StyledContainer>
       {recordSamples.current && <p>Recording samples...</p>}
       {Object.keys(samplesCounter).map((key) => {

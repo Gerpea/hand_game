@@ -5,7 +5,7 @@
   "scripts": {
     "dev": "next dev -p 8080",
     "build": "next build",
-    "start": "next start -p 3030",
+    "start": "next start -p 8080",
     "lint": "next lint",
     "format": "prettier --write .",
     "e2e:start": "CYPRESS=true next start -p 8080",
