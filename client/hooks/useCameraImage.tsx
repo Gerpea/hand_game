@@ -3,7 +3,7 @@ import { useEffect, useRef, useState } from "react";
 
 const LOCAL_STREAM_CONSTRAINTS = {
   audio: false,
-  video: true,
+  video: true
 };
 /**
  * Use MediaStream from camera to get image every browser repaint

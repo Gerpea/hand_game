@@ -1,10 +1,4 @@
-import React, {
-  HTMLAttributes,
-  useCallback,
-  useEffect,
-  useRef,
-  useState,
-} from "react";
+import React, { HTMLAttributes, useCallback, useEffect, useRef, useState } from "react";
 import Image from "next/image";
 import { Gesture } from "@/types";
 import styled, { css } from "styled-components";
@@ -27,10 +21,7 @@ type Props = {
   gesture: Gesture;
 };
 
-const GestureImage: React.FC<Props & HTMLAttributes<HTMLImageElement>> = ({
-  gesture,
-  className,
-}) => {
+const GestureImage: React.FC<Props & HTMLAttributes<HTMLImageElement>> = ({ gesture, className }) => {
   const [showedGesture, setShowedGesture] = useState<Gesture>(gesture);
   const [showGesture, setShowGesture] = useState<boolean>(false);
 
@@ -46,8 +37,8 @@ const GestureImage: React.FC<Props & HTMLAttributes<HTMLImageElement>> = ({
 
   const handleImageLoad = useCallback(() => {
     setShowGesture(true);
-  }, [])
-  
+  }, []);
+
   return (
     <StyledImage
       src={showedGesture.img}

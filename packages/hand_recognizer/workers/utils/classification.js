@@ -7,10 +7,9 @@ import { GESTURE_CLASSES } from "../const";
  * @return {GestureClass[]} Labeled probabilities
  */
 export function labelProbs(probs) {
-    return probs.map((prob, i) => ({
-        id: i.toString(),
-        label: GESTURE_CLASSES[i],
-        probability: prob
-
-    }))
+  return probs.map((prob, i) => ({
+    id: i.toString(),
+    label: GESTURE_CLASSES[i],
+    probability: prob
+  }));
 }

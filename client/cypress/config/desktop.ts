@@ -1,6 +1,6 @@
-import { defineConfig } from 'cypress';
-import defu from 'defu';
-import defaultConfig from './default';
+import { defineConfig } from "cypress";
+import defu from "defu";
+import defaultConfig from "./default";
 
 export default defineConfig(
   defu(
@@ -8,7 +8,7 @@ export default defineConfig(
       viewportWidth: 1920,
       viewportHeight: 1080,
       e2e: {
-        specPattern: 'cypress/e2e/desktop/**/*.cy.{js,jsx,ts,tsx}'
+        specPattern: "cypress/e2e/desktop/**/*.cy.{js,jsx,ts,tsx}"
       }
     },
     defaultConfig

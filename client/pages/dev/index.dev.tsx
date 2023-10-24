@@ -1,9 +1,5 @@
 import { useCallback, useEffect, useRef, useState } from "react";
-import {
-  Box,
-  useGestureClassification,
-  useHandPosition,
-} from "hand_recognizer";
+import { Box, useGestureClassification, useHandPosition } from "hand_recognizer";
 import styled from "styled-components";
 import GestureCard from "@/components/GestureCard";
 import HandCard from "@/components/HandCard";
@@ -32,7 +28,7 @@ export default function DevHome() {
     total: number;
     [gesture: string]: number;
   }>({
-    total: 0,
+    total: 0
   });
 
   const cameraImage = useCameraImage();
@@ -41,7 +37,7 @@ export default function DevHome() {
   const { detect } = useHandPosition({
     scoreThreshold: 0.7,
     iouThreshold: 0.6,
-    topk: 2,
+    topk: 2
   });
   const { classify } = useGestureClassification();
 
@@ -49,9 +45,7 @@ export default function DevHome() {
     samplesRef.current.push(sample);
     setSamplesCounter((counter) => {
       counter.total = samplesRef.current.length;
-      counter[sample.gesture] = samplesRef.current.filter(
-        (s) => s.gesture === sample.gesture
-      ).length;
+      counter[sample.gesture] = samplesRef.current.filter((s) => s.gesture === sample.gesture).length;
 
       return counter;
     });
@@ -59,13 +53,9 @@ export default function DevHome() {
 
   const saveSamples = useCallback(() => {
     saveAs(
-      new File(
-        [JSON.stringify(samplesRef.current)],
-        `samples_${Date.now()}.json`,
-        {
-          type: "text/plain;charset=utf-8",
-        }
-      )
+      new File([JSON.stringify(samplesRef.current)], `samples_${Date.now()}.json`, {
+        type: "text/plain;charset=utf-8"
+      })
     );
   }, []);
 
@@ -108,7 +98,7 @@ export default function DevHome() {
           addSample({
             gesture: gesture.label,
             box: boxes[0],
-            image: cameraImage,
+            image: cameraImage
           });
         }
         setBoxes(boxes);
@@ -118,10 +108,7 @@ export default function DevHome() {
 
   return (
     <>
-      <p>
-        Fold you finger to gesture on the card, wait for green box appear around
-        you hand
-      </p>
+      <p>Fold you finger to gesture on the card, wait for green box appear around you hand</p>
       <p>Then press the spacebar and wait a 3 seconds</p>
       <p>Repeat</p>
       <StyledContainer>

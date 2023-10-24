@@ -20,7 +20,10 @@
     "redis:start": "docker-compose up -d",
     "redis:stop": "docker-compose down",
     "packages:build": "npm run build --workspace=packages",
-    "packages:link": "npm link --workspace=packages"
+    "packages:link": "npm link --workspace=packages",
+    "format": "npm run format --workspaces",
+    "lint": "npm run lint --workspaces",
+    "prepare": "husky install"
   },
   "repository": {
     "type": "git",
@@ -34,6 +37,7 @@
   "homepage": "https://github.com/Gerpea/hand_game#readme",
   "devDependencies": {
     "concurrently": "^8.2.1",
+    "husky": "^8.0.3",
     "wait-on": "^7.0.1"
   }
 }

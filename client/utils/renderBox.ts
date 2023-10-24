@@ -5,11 +5,11 @@ export const renderBoxes = (ctx: CanvasRenderingContext2D, boxes: Box[], xRatio 
   ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
 
   boxes.forEach((box) => {
-    const color = '#48F90A';
+    const color = "#48F90A";
     const { x: x1, y: y1, w: width, h: height } = box;
 
     // Draw box.
-    ctx.fillStyle = '#48F90A43';
+    ctx.fillStyle = "#48F90A43";
     ctx.fillRect(x1 * xRatio, y1 * yRatio, width * xRatio, height * yRatio);
     // Draw border box
     ctx.strokeStyle = color;

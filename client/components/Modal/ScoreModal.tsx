@@ -1,11 +1,5 @@
 import { HTMLAttributes, useCallback, useMemo } from "react";
-import {
-  ModalBase,
-  Props,
-  StyledModalBody,
-  StyledModalFooter,
-  StyledModalTitle,
-} from "./ModalBase";
+import { ModalBase, Props, StyledModalBody, StyledModalFooter, StyledModalTitle } from "./ModalBase";
 import { useGame } from "@/hooks";
 import styled from "styled-components";
 import { useRouter } from "next/router";
@@ -48,9 +42,7 @@ const StyledDisconnectButton = styled.div`
   }
 `;
 
-export const ScoreModal: React.FC<Props & HTMLAttributes<HTMLDivElement>> = ({
-  ...props
-}) => {
+export const ScoreModal: React.FC<Props & HTMLAttributes<HTMLDivElement>> = ({ ...props }) => {
   const { t } = useTranslation("common", { keyPrefix: "scoreModal" });
 
   const router = useRouter();
@@ -77,9 +69,7 @@ export const ScoreModal: React.FC<Props & HTMLAttributes<HTMLDivElement>> = ({
         </StyledScores>
       </StyledModalBody>
       <StyledModalFooter>
-        <StyledDisconnectButton onClick={handleDisconnect}>
-          {t("disconnect")}
-        </StyledDisconnectButton>
+        <StyledDisconnectButton onClick={handleDisconnect}>{t("disconnect")}</StyledDisconnectButton>
       </StyledModalFooter>
     </ModalBase>
   );

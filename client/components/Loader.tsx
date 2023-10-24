@@ -88,7 +88,7 @@ const StyledLoader = styled.div`
 `;
 
 const Loader = () => {
-  return <StyledLoader data-cy="loader"/>;
+  return <StyledLoader data-cy="loader" />;
 };
 
 export default Loader;

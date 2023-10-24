@@ -1,20 +1,8 @@
-import {
-  Inject,
-  Injectable,
-  InternalServerErrorException,
-  Logger,
-  NotFoundException,
-} from '@nestjs/common';
-import { ConfigService } from '@nestjs/config';
-import { Redis } from 'ioredis';
-import { IO_REDIS_KEY } from 'src/redis.module';
-import {
-  AddScoreData,
-  AddUserData,
-  CreateGameData,
-  Game,
-  RemoveUserData,
-} from './types';
+import { Inject, Injectable, InternalServerErrorException, Logger, NotFoundException } from "@nestjs/common";
+import { ConfigService } from "@nestjs/config";
+import { Redis } from "ioredis";
+import { IO_REDIS_KEY } from "src/redis.module";
+import { AddScoreData, AddUserData, CreateGameData, Game, RemoveUserData } from "./types";
 
 @Injectable()
 export class GameRepository {
@@ -23,39 +11,33 @@ export class GameRepository {
 
   constructor(
     configService: ConfigService,
-    @Inject(IO_REDIS_KEY) private readonly redisClient: Redis,
+    @Inject(IO_REDIS_KEY) private readonly redisClient: Redis
   ) {
-    this.ttl = configService.get('GAME_DURATION');
+    this.ttl = configService.get("GAME_DURATION");
   }
 
   async createGame({ gameID }: CreateGameData): Promise<Game> {
     const initialGame: Game = {
       id: gameID,
       users: {},
-      scores: {},
+      scores: {}
     };
 
-    this.logger.log(
-      `Creating new game: ${JSON.stringify(initialGame, null, 2)} with TTL ${
-        this.ttl
-      }`,
-    );
+    this.logger.log(`Creating new game: ${JSON.stringify(initialGame, null, 2)} with TTL ${this.ttl}`);
 
     const key = `games:${gameID}`;
 
     try {
       await this.redisClient
         .multi([
-          ['send_command', 'JSON.SET', key, '.', JSON.stringify(initialGame)],
-          ['expire', key, this.ttl],
+          ["send_command", "JSON.SET", key, ".", JSON.stringify(initialGame)],
+          ["expire", key, this.ttl]
         ])
         .exec();
       return initialGame;
     } catch (e) {
-      this.logger.error(
-        `Failed to add game ${JSON.stringify(initialGame)}\n${e}`,
-      );
-      throw new InternalServerErrorException('Something went wrong');
+      this.logger.error(`Failed to add game ${JSON.stringify(initialGame)}\n${e}`);
+      throw new InternalServerErrorException("Something went wrong");
     }
   }
 
@@ -64,11 +46,7 @@ export class GameRepository {
     const key = `games:${gameID}`;
 
     try {
-      const currentGame = await this.redisClient.send_command(
-        'JSON.GET',
-        key,
-        '.',
-      );
+      const currentGame = await this.redisClient.send_command("JSON.GET", key, ".");
 
       this.logger.verbose(currentGame);
 
@@ -80,9 +58,7 @@ export class GameRepository {
   }
 
   async addScore({ gameID, userID }: AddScoreData): Promise<Game> {
-    this.logger.log(
-      `Attempting to add a score for userID: ${userID} to gameID: ${gameID}`,
-    );
+    this.logger.log(`Attempting to add a score for userID: ${userID} to gameID: ${gameID}`);
 
     const key = `games:${gameID}`;
     const scorePath = `.scores.${userID}`;
@@ -92,84 +68,59 @@ export class GameRepository {
       game.scores[userID] = (game.scores[userID] ?? 0) + 1;
       const score = game.scores[userID];
 
-      await this.redisClient.send_command(
-        'JSON.SET',
-        key,
-        scorePath,
-        JSON.stringify(score),
-      );
+      await this.redisClient.send_command("JSON.SET", key, scorePath, JSON.stringify(score));
 
       this.logger.debug(`Current scores for gameID: ${gameID}`, game.scores);
 
       return game;
     } catch (e) {
-      this.logger.error(
-        `Failed to add a score for userID: ${userID} to gameID: ${gameID}`,
-      );
+      this.logger.error(`Failed to add a score for userID: ${userID} to gameID: ${gameID}`);
       throw new NotFoundException(`game with gameID: ${gameID} do not exist`);
     }
   }
 
   async addUser({ gameID, userID }: AddUserData): Promise<Game> {
-    this.logger.log(
-      `Attempting to add a user with userID: ${userID} to gameID: ${gameID}`,
-    );
+    this.logger.log(`Attempting to add a user with userID: ${userID} to gameID: ${gameID}`);
 
     const key = `games:${gameID}`;
     const usersPath = `.users.${userID}`;
 
     try {
-      await this.redisClient.send_command(
-        'JSON.SET',
-        key,
-        usersPath,
-        JSON.stringify(true),
-      );
+      await this.redisClient.send_command("JSON.SET", key, usersPath, JSON.stringify(true));
 
       const game = await this.getGame(gameID);
 
       this.logger.debug(
         `Current users for gameID: ${gameID}`,
-        Object.keys(game.users).filter((k) => game.users[k]),
+        Object.keys(game.users).filter((k) => game.users[k])
       );
 
       return game;
     } catch (e) {
-      this.logger.error(
-        `Failed to add a user with userID: ${userID} to gameID: ${gameID}`,
-      );
+      this.logger.error(`Failed to add a user with userID: ${userID} to gameID: ${gameID}`);
       throw new NotFoundException(`game with gameID: ${gameID} do not exist`);
     }
   }
 
   async removeUser({ gameID, userID }: RemoveUserData): Promise<Game> {
-    this.logger.log(
-      `Attempting to remove a user with userID: ${userID} from gameID: ${gameID}`,
-    );
+    this.logger.log(`Attempting to remove a user with userID: ${userID} from gameID: ${gameID}`);
 
     const key = `games:${gameID}`;
     const usersPath = `.users.${userID}`;
 
     try {
-      await this.redisClient.send_command(
-        'JSON.SET',
-        key,
-        usersPath,
-        JSON.stringify(false),
-      );
+      await this.redisClient.send_command("JSON.SET", key, usersPath, JSON.stringify(false));
 
       const game = await this.getGame(gameID);
 
       this.logger.debug(
         `Current users for gameID: ${gameID}`,
-        Object.keys(game.users).filter((k) => game.users[k]),
+        Object.keys(game.users).filter((k) => game.users[k])
       );
 
       return game;
     } catch (e) {
-      this.logger.error(
-        `Failed to remove a user with userID: ${userID} from gameID: ${gameID}`,
-      );
+      this.logger.error(`Failed to remove a user with userID: ${userID} from gameID: ${gameID}`);
       throw new NotFoundException(`game with gameID: ${gameID} do not exist`);
     }
   }

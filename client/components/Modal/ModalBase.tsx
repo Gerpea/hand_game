@@ -41,9 +41,7 @@ const StyledOverlayContainer = styled.div<{ $isClosing: boolean }>`
   align-items: center;
 
   z-index: 999;
-  animation: ${({ $isClosing }) =>
-      $isClosing ? overlayDisappear : overlayAppear}
-    0.7s ease forwards;
+  animation: ${({ $isClosing }) => ($isClosing ? overlayDisappear : overlayAppear)} 0.7s ease forwards;
 `;
 
 const StyledModalContainer = styled(Card)<{ $isClosing: boolean }>`
@@ -52,8 +50,7 @@ const StyledModalContainer = styled(Card)<{ $isClosing: boolean }>`
   background-color: var(--card-color);
   box-shadow: none;
 
-  animation: ${({ $isClosing }) => ($isClosing ? zoomOut() : zoomIn(false))}
-    0.5s ease forwards;
+  animation: ${({ $isClosing }) => ($isClosing ? zoomOut() : zoomIn(false))} 0.5s ease forwards;
 
   display: flex;
   flex-direction: column;
@@ -155,12 +152,7 @@ export const ModalBase: React.FC<Props & HTMLAttributes<HTMLDivElement>> = ({
   return (
     isRender &&
     createPortal(
-      <StyledOverlayContainer
-        {...props}
-        onClick={onClose}
-        $isClosing={!isOpen}
-        onAnimationEnd={handleAnimationEnd}
-      >
+      <StyledOverlayContainer {...props} onClick={onClose} $isClosing={!isOpen} onAnimationEnd={handleAnimationEnd}>
         <StyledModalContainer onClick={stopPropagation} $isClosing={!isOpen}>
           <StyledCloseButton onClick={onClose}>
             <StyledCloseIcon />

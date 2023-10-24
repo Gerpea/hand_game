@@ -20,11 +20,7 @@ const StyledCanvas = styled(Canvas)`
   position: absolute;
 `;
 
-const HandCard: React.FC<Props & HTMLAttributes<HTMLDivElement>> = ({
-  imgSrc,
-  boxes,
-  ...props
-}) => {
+const HandCard: React.FC<Props & HTMLAttributes<HTMLDivElement>> = ({ imgSrc, boxes, ...props }) => {
   const canvasImgCtx = useRef<CanvasRenderingContext2D>(null);
   const canvasBoxesCtx = useRef<CanvasRenderingContext2D>(null);
 

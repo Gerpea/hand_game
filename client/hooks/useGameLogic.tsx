@@ -1,8 +1,4 @@
-import {
-  Box,
-  useGestureClassification,
-  useHandPosition,
-} from "hand_recognizer";
+import { Box, useGestureClassification, useHandPosition } from "hand_recognizer";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { useApi, useCameraImage, useGesture } from ".";
 import { Gesture } from "@/types";
@@ -13,8 +9,7 @@ export const useGameLogic = (tickTime: number) => {
   const { gesture, nextGesture } = useGesture();
   const { addScore } = useApi();
   const { detect, inited: handPositionInited } = useHandPosition();
-  const { classify, inited: gestureClassificationInited } =
-    useGestureClassification();
+  const { classify, inited: gestureClassificationInited } = useGestureClassification();
 
   const isLoading = useMemo(
     () => !handPositionInited || !gestureClassificationInited,
@@ -49,9 +44,7 @@ export const useGameLogic = (tickTime: number) => {
         return;
       }
       const classes = await classify(cameraImgSrcRef.current, box);
-      const topClass = classes.sort((a, b) =>
-        a.probability < b.probability ? 1 : -1
-      )[0];
+      const topClass = classes.sort((a, b) => (a.probability < b.probability ? 1 : -1))[0];
       if (topClass.probability > 0.9 && topClass.id === gestureRef.current.id) {
         addScore();
         nextGesture();
@@ -63,6 +56,6 @@ export const useGameLogic = (tickTime: number) => {
     gesture,
     boxes,
     isLoading,
-    cameraImgSrc,
+    cameraImgSrc
   };
 };

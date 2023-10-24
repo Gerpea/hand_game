@@ -6,7 +6,7 @@ import { shuffleArray } from "@/utils";
 let gestures = shuffleArray<Gesture>(
   GESTURES.map((gesture) => ({
     ...gesture,
-    img: `/images/gestures/${gesture.label.toLowerCase()}.svg`,
+    img: `/images/gestures/${gesture.label.toLowerCase()}.svg`
   })).slice(1)
 );
 
@@ -25,6 +25,6 @@ export const useGesture = () => {
 
   return {
     gesture,
-    nextGesture,
+    nextGesture
   };
 };

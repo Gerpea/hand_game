@@ -1,4 +1,4 @@
-import { Length, IsString } from 'class-validator';
+import { Length, IsString } from "class-validator";
 
 export class JoinGameDto {
   @IsString()

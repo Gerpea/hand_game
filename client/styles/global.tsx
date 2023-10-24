@@ -2,7 +2,7 @@ import { createGlobalStyle } from "styled-components";
 import { Roboto_Mono } from "next/font/google";
 
 const robotoMono = Roboto_Mono({
-  subsets: ["latin", "cyrillic"],
+  subsets: ["latin", "cyrillic"]
 });
 
 export const GlobalStyles = createGlobalStyle`

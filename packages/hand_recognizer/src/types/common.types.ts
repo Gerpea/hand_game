@@ -1,4 +1,4 @@
-import { InferenceSession } from "onnxruntime-web"
+import { InferenceSession } from "onnxruntime-web";
 
 /**
  * HandDetectorSession
@@ -6,9 +6,9 @@ import { InferenceSession } from "onnxruntime-web"
  * @param {InferenceSession} iouThreshold NMS model Session
  */
 export type Session = {
-    net: InferenceSession,
-    nms: InferenceSession
-}
+  net: InferenceSession;
+  nms: InferenceSession;
+};
 
 /**
  * HandDetectorParams
@@ -17,10 +17,10 @@ export type Session = {
  * @param {Number} scoreThreshold Threshold for deciding when to remove boxes based on score
  */
 export type Params = {
-    topk: number;
-    iouThreshold: number;
-    scoreThreshold: number;
-}
+  topk: number;
+  iouThreshold: number;
+  scoreThreshold: number;
+};
 
 /**
  * Detected Box
@@ -28,17 +28,17 @@ export type Params = {
  * @param {Number} y Y coord of box from bottom side
  * @param {Number} w Y Width of box
  * @param {Number} h Y Height of box
- * 
+ *
  */
 export type Box = {
-    x: number;
-    y: number;
-    w: number;
-    h: number;
-}
+  x: number;
+  y: number;
+  w: number;
+  h: number;
+};
 
 export type GestureClass = {
-    id: string;
-    label: string;
-    probability: number;
-}
+  id: string;
+  label: string;
+  probability: number;
+};

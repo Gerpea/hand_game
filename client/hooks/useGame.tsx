@@ -1,5 +1,5 @@
 import { useStore } from "@/store/app";
-import { useEffect, useMemo } from "react";
+import { useMemo } from "react";
 
 export const useGame = () => {
   const { userID, gameID, scores, users, disconnect } = useStore((state) => ({
@@ -7,20 +7,14 @@ export const useGame = () => {
     gameID: state.game.id,
     scores: state.game.scores,
     users: state.game.users,
-    disconnect: state.disconnect,
+    disconnect: state.disconnect
   }));
 
   const opponentID = useMemo(
-    () =>
-      Object.entries(users).filter(
-        ([id, active]) => id !== userID && active
-      )?.[0]?.[0],
+    () => Object.entries(users).filter(([id, active]) => id !== userID && active)?.[0]?.[0],
     [users, userID]
   );
-  const opponentScore = useMemo(
-    () => scores[opponentID] || 0,
-    [opponentID, scores]
-  );
+  const opponentScore = useMemo(() => scores[opponentID] || 0, [opponentID, scores]);
   const myScore = useMemo(() => scores[userID] || 0, [scores, userID]);
 
   return {
@@ -31,6 +25,6 @@ export const useGame = () => {
     disconnect,
     opponentID,
     opponentScore,
-    myScore,
+    myScore
   };
 };

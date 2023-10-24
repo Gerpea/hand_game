@@ -1,15 +1,15 @@
-import { Injectable, Logger } from '@nestjs/common';
-import { JwtService } from '@nestjs/jwt';
-import { GameRepository } from './game.repository';
-import { createGameID, createUserID } from 'src/ids';
-import { AddScoreFields, AddUserFields, Game, RemoveUserFields } from './types';
+import { Injectable, Logger } from "@nestjs/common";
+import { JwtService } from "@nestjs/jwt";
+import { GameRepository } from "./game.repository";
+import { createGameID, createUserID } from "src/ids";
+import { AddScoreFields, AddUserFields, Game, RemoveUserFields } from "./types";
 
 @Injectable()
 export class GameService {
   private readonly logger = new Logger(GameService.name);
   constructor(
     private readonly gameRepository: GameRepository,
-    private readonly jwtService: JwtService,
+    private readonly jwtService: JwtService
   ) {}
 
   async createGame() {
@@ -19,7 +19,7 @@ export class GameService {
     this.logger.debug(`Creating game with id: ${createdGame.id}`);
 
     return {
-      game: createdGame,
+      game: createdGame
     };
   }
 
@@ -29,12 +29,12 @@ export class GameService {
     this.logger.debug(`Creating token string for userID: ${userID}`);
 
     const signedString = this.jwtService.sign({
-      sub: userID,
+      sub: userID
     });
 
     return {
       userID: userID,
-      accessToken: signedString,
+      accessToken: signedString
     };
   }
 

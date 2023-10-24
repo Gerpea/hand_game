@@ -1,15 +1,15 @@
 {
-    "optionsModal.title": "Share this url with your friend",
-    "optionsModal.copiedToClipboard": "Copied <bold>{{subj}}</bold> to clipboard",
-    "scoreModal.title": "Score Board",
-    "scoreModal.you": "You",
-    "scoreModal.opponent": "Opponent",
-    "scoreModal.disconnect": "Disconnect",
-    "toast.error.gameNotFound": "Game not found, new game was created instead",
-    "toast.error.tokenExpired": "Access token just expired, new was created",
-    "toast.error.roomIsFull": "Game is full, new game was created",
-    "toast.error.unknown": "Unknown error",
-    "toast.userConnected": "Your opponent enter the gmae",
-    "toast.userDisconnected": "Your opponent leave the game",
-    "mobile.notSupported": "Sorry, but currently we do not support any of mobile devices, please open this page on desktop"
+  "optionsModal.title": "Share this url with your friend",
+  "optionsModal.copiedToClipboard": "Copied <bold>{{subj}}</bold> to clipboard",
+  "scoreModal.title": "Score Board",
+  "scoreModal.you": "You",
+  "scoreModal.opponent": "Opponent",
+  "scoreModal.disconnect": "Disconnect",
+  "toast.error.gameNotFound": "Game not found, new game was created instead",
+  "toast.error.tokenExpired": "Access token just expired, new was created",
+  "toast.error.roomIsFull": "Game is full, new game was created",
+  "toast.error.unknown": "Unknown error",
+  "toast.userConnected": "Your opponent enter the gmae",
+  "toast.userDisconnected": "Your opponent leave the game",
+  "mobile.notSupported": "Sorry, but currently we do not support any of mobile devices, please open this page on desktop"
 }

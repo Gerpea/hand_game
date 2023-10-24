@@ -8,14 +8,15 @@ const StyledCard = styled.div`
   overflow: hidden;
 `;
 
-const Card = forwardRef<HTMLDivElement, React.HTMLAttributes<HTMLDivElement>>(
-  function Card({ children, ...props }, ref) {
-    return (
-      <StyledCard {...props} ref={ref as any}>
-        {children}
-      </StyledCard>
-    );
-  }
-);
+const Card = forwardRef<HTMLDivElement, React.HTMLAttributes<HTMLDivElement>>(function Card(
+  { children, ...props },
+  ref
+) {
+  return (
+    <StyledCard {...props} ref={ref as any}>
+      {children}
+    </StyledCard>
+  );
+});
 
 export default Card;

@@ -1,3 +1,3 @@
-export * from './download'
-export * from './preprocess'
-export * from './classification'
+export * from "./download";
+export * from "./preprocess";
+export * from "./classification";

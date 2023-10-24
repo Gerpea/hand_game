@@ -12,6 +12,8 @@
   "types": "lib/index.d.ts",
   "scripts": {
     "start": "webpack --watch",
+    "format": "prettier --write .",
+    "lint": "",
     "build": "npm run clean && tsc && webpack",
     "clean": "shx rm -rf _bundles lib lib-esm"
   },

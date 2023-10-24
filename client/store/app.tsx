@@ -1,9 +1,4 @@
-import {
-  SocketWithActions,
-  createGame,
-  createSocketWithHandlers,
-  getToken,
-} from "@/api";
+import { SocketWithActions, createGame, createSocketWithHandlers, getToken } from "@/api";
 import { Game } from "@/types";
 import { toast } from "react-toastify";
 import { StateCreator, create } from "zustand";
@@ -27,10 +22,10 @@ const initialState: State = {
   game: {
     id: "",
     scores: {},
-    users: {},
+    users: {}
   },
   userID: "",
-  accessToken: "",
+  accessToken: ""
 };
 
 const state: StateCreator<State & Actions, [], []> = (set, get) => {
@@ -73,15 +68,13 @@ const state: StateCreator<State & Actions, [], []> = (set, get) => {
           return;
         }
         toast.error("toast.error.unknown");
-      },
+      }
     });
 
   return {
     ...initialState,
     addScore() {
-      if (
-        Object.values(get().game.users).filter((active) => active).length > 1
-      ) {
+      if (Object.values(get().game.users).filter((active) => active).length > 1) {
         socket?.addScore();
       }
     },
@@ -126,7 +119,7 @@ const state: StateCreator<State & Actions, [], []> = (set, get) => {
     },
     disconnect() {
       set({ game: initialState.game });
-    },
+    }
   };
 };
 
@@ -136,8 +129,8 @@ export const useStore = create<State & Actions>()(
       name: "game-storage",
       partialize: (state) => ({
         accessToken: state.accessToken,
-        userID: state.userID,
-      }),
+        userID: state.userID
+      })
     })
   )
 );

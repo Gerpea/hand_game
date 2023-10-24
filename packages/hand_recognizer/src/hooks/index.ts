@@ -1,2 +1,2 @@
-export * from './useHandPosition'
-export * from './useGestureClassification'
+export * from "./useHandPosition";
+export * from "./useGestureClassification";

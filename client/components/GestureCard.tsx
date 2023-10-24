@@ -22,10 +22,7 @@ type Props = {
   gesture: Gesture;
 };
 
-const GestureCard: React.FC<Props & HTMLAttributes<HTMLDivElement>> = ({
-  gesture,
-  ...props
-}) => {
+const GestureCard: React.FC<Props & HTMLAttributes<HTMLDivElement>> = ({ gesture, ...props }) => {
   return (
     <StyledGestureCard {...props}>
       <StyledGestureImage gesture={gesture} />

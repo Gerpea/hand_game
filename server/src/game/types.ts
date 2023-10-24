@@ -1,5 +1,5 @@
-import { Request } from 'express';
-import { Socket } from 'socket.io';
+import { Request } from "express";
+import { Socket } from "socket.io";
 
 export type Users = {
   [userID: string]: boolean;

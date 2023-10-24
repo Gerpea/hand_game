@@ -27,27 +27,28 @@
 //
 
 declare global {
-    namespace Cypress {
-        interface Chainable {
-            // login(email: string, password: string): Chainable<void>
-            // drag(subject: string, options?: Partial<TypeOptions>): Chainable<Element>
-            // dismiss(subject: string, options?: Partial<TypeOptions>): Chainable<Element>
-            visit(url: string, options: Partial<VisitOptions>): Chainable<Element>
-        }
+  namespace Cypress {
+    interface Chainable {
+      // login(email: string, password: string): Chainable<void>
+      // drag(subject: string, options?: Partial<TypeOptions>): Chainable<Element>
+      // dismiss(subject: string, options?: Partial<TypeOptions>): Chainable<Element>
+      visit(url: string, options: Partial<VisitOptions>): Chainable<Element>;
     }
+  }
 }
 
-import defu from 'defu';
+import defu from "defu";
 
-Cypress.Commands.overwrite('visit', (originalFn, url, options) => {
-    return originalFn(url, defu(
-        {
-            headers: {
-                'Accept-Language': 'en',
-            }
-        },
-        options)
+Cypress.Commands.overwrite("visit", (originalFn, url, options) => {
+  return originalFn(
+    url,
+    defu(
+      {
+        headers: {
+          "Accept-Language": "en"
+        }
+      },
+      options
     )
-})
-
-
+  );
+});

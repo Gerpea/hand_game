@@ -1,11 +1,6 @@
 import { HTMLAttributes, useCallback } from "react";
 import { BiCopy } from "react-icons/bi";
-import {
-  ModalBase,
-  Props,
-  StyledModalBody,
-  StyledModalTitle,
-} from "./ModalBase";
+import { ModalBase, Props, StyledModalBody, StyledModalTitle } from "./ModalBase";
 import styled from "styled-components";
 import { copyTextToClipboard } from "@/utils";
 import { toast } from "react-toastify";
@@ -32,9 +27,7 @@ const StyledShareIcon = styled(BiCopy)`
   height: 1.5rem;
 `;
 
-export const OptionsModal: React.FC<Props & HTMLAttributes<HTMLDivElement>> = ({
-  ...props
-}) => {
+export const OptionsModal: React.FC<Props & HTMLAttributes<HTMLDivElement>> = ({ ...props }) => {
   const { t } = useTranslation("common", { keyPrefix: "optionsModal" });
   const shareURL = `${typeof window !== "undefined" && window?.location?.href}`;
 

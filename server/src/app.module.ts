@@ -1,17 +1,17 @@
-import { Module } from '@nestjs/common';
-import { ConfigModule } from '@nestjs/config';
-import { GameModule } from './game/game.module';
+import { Module } from "@nestjs/common";
+import { ConfigModule } from "@nestjs/config";
+import { GameModule } from "./game/game.module";
 
 const ENV = process.env.NODE_ENV;
 
 @Module({
   imports: [
     ConfigModule.forRoot({
-      envFilePath: !ENV ? '.env' : `.env.${ENV}`,
+      envFilePath: !ENV ? ".env" : `.env.${ENV}`
     }),
-    GameModule,
+    GameModule
   ],
   controllers: [],
-  providers: [],
+  providers: []
 })
 export class AppModule {}

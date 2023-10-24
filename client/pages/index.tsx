@@ -57,7 +57,7 @@ const StyledOptionsButton = styled(Card)`
 
   cursor: pointer;
 
-  transition: width .33s ease;
+  transition: width 0.33s ease;
 
   &:hover {
     transform: scale(1.1);
@@ -73,7 +73,7 @@ const StyledOptionsIcon = styled(HiPlay)`
 
 const StyledToastContainer = styled(ToastContainer).attrs({
   className: "toast-container",
-  toastClassName: "toast",
+  toastClassName: "toast"
 })`
   width: fit-content;
   max-width: 50%;
