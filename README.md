@@ -4,7 +4,7 @@
   </a>
 </p>
 <p align="center">
-    <a href="https://handgesture.ru">View Demo</a>
+    <a href="https://handgesture.ru">Попробовать</a>
 </p>
 
 ## О проекте
