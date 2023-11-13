@@ -3,13 +3,10 @@
     <img src="readme/logo.png" alt="Logo" width="80" height="80">
   </a>
 </p>
-<p align="center">
-    <a href="https://handgesture.ru">Попробовать</a>
-</p>
 
 ## О проекте
 
-[![Hand Game Screen Shot][product-screenshot]](https://handgesture.ru)
+![Hand Game Screen Shot][product-screenshot]
 
 Мини игра в которой нужно повторять жесты на картинке
 
